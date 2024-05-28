@@ -17,7 +17,21 @@ export const metadata: Metadata = {
 const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
   return (
     <html lang="en">
-      <ClerkProvider>
+      <ClerkProvider
+        appearance={{
+          layout: {
+            logoImageUrl: "/icons/yoom-logo.svg",
+            socialButtonsVariant: "iconButton",
+          },
+          variables: {
+            colorText: "#FFF",
+            colorPrimary: "#0E78F9",
+            colorBackground: "#1C1F2E",
+            colorInputBackground: "#252A41",
+            colorInputText: "#FFF",
+          },
+        }}
+      >
         <body className={cn("bg-dark-2", inter.className)}>{children}</body>
       </ClerkProvider>
     </html>
