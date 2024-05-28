@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type { PropsWithChildren } from "react";
@@ -16,7 +17,9 @@ export const metadata: Metadata = {
 const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
   return (
     <html lang="en">
-      <body className={cn("bg-dark-2", inter.className)}>{children}</body>
+      <ClerkProvider>
+        <body className={cn("bg-dark-2", inter.className)}>{children}</body>
+      </ClerkProvider>
     </html>
   );
 };
