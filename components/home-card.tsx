@@ -17,11 +17,9 @@ export const HomeCard = ({
   handleClick,
 }: HomeCardProps) => {
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <button
       className={cn(
-        "px-4 py-6 flex flex-col justify-between w-full xl:max-w-[270px] min-h-[260px] rounded-[14px] cursor-pointer",
+        "p-0 text-left px-4 py-6 flex flex-col justify-between w-full xl:max-w-[270px] min-h-[260px] rounded-[14px] cursor-pointer",
         className
       )}
       onClick={handleClick}
@@ -35,6 +33,6 @@ export const HomeCard = ({
 
         <p className="text-lg font-normal">{description}</p>
       </div>
-    </div>
+    </button>
   );
 };
