@@ -1,3 +1,5 @@
+import { MeetingTypeList } from "@/components/meeting-type-list";
+
 const HomePage = () => {
   const now = new Date();
 
@@ -24,6 +26,8 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      <MeetingTypeList />
     </section>
   );
 };
