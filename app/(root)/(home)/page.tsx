@@ -1,12 +1,17 @@
+"use client";
+
 import { MeetingTypeList } from "@/components/meeting-type-list";
+import { useGetCalls } from "@/hooks/use-get-calls";
 
 const HomePage = () => {
   const now = new Date();
+  const { upcomingCalls } = useGetCalls();
 
   const time = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
   });
+
   const date = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
     now
   );
@@ -16,7 +21,16 @@ const HomePage = () => {
       <div className="h-[300px] w-full rounded-[20px] bg-hero bg-cover">
         <div className="flex h-full flex-col justify-between max-md:px-5 max-md:py-8 lg:p-11">
           <h2 className="glassmorphism max-w-[270px] rounded py-2 text-center text-base font-normal">
-            Upcoming meeting at 12:30 PM
+            {upcomingCalls?.length === 0
+              ? "No upcoming meeting"
+              : upcomingCalls?.length &&
+                `Upcoming meeting at: 
+                ${upcomingCalls[
+                  upcomingCalls.length - 1
+                ].state?.startsAt?.toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}`}
           </h2>
 
           <div className="flex flex-col gap-2">

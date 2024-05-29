@@ -138,8 +138,9 @@ export const MeetingTypeList = () => {
             <label className="text-base text-normal leading-[22px] text-sky-2">
               Add a description
               <Textarea
+                rows={6}
                 placeholder="Add a description..."
-                className="border-none bg-dark-3 mt-2"
+                className="border-none bg-dark-3 mt-2 resize-none"
                 onChange={(e) => {
                   setValues({ ...values, description: e.target.value });
                 }}
