@@ -186,7 +186,7 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 ### 9. Save and Secure:
 
-    - Save the changes to the `.env.local` file.
+- Save the changes to the `.env.local` file.
 
 10. Install Project Dependencies using `npm install --legacy-peer-deps` or `yarn install --legacy-peer-deps`.
 
