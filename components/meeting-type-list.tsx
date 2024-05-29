@@ -9,6 +9,7 @@ import { MeetingModal } from "@/components/modals/meeting-modal";
 import { useToast } from "@/components/ui/use-toast";
 
 import { HomeCard } from "./home-card";
+import { Loader } from "./loader";
 
 type MeetingState =
   | "isScheduleMeeting"
@@ -83,6 +84,8 @@ export const MeetingTypeList = () => {
       setIsLoading(false);
     }
   };
+
+  if (!streamClient || !user || !user?.id) return <Loader />;
 
   return (
     <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">

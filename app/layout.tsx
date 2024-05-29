@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
+import "@stream-io/video-react-sdk/dist/css/styles.css";
+
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 
