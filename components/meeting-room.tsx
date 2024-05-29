@@ -72,7 +72,10 @@ export const MeetingRoom = () => {
 
         <DropdownMenu>
           <div className="flex items-center">
-            <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232D] px-4 py-2 hover:bg-[#4C535B]">
+            <DropdownMenuTrigger
+              className="cursor-pointer rounded-2xl bg-[#19232D] px-4 py-2 hover:bg-[#4C535B]"
+              title="Call layout"
+            >
               <LayoutList size={20} className="text-white" />
             </DropdownMenuTrigger>
           </div>
@@ -102,6 +105,7 @@ export const MeetingRoom = () => {
           onClick={() =>
             setShowParticipants((prevShowParticipants) => !prevShowParticipants)
           }
+          title="Show participants"
         >
           <div className="cursor-pointer rounded-2xl bg-[#19232D] px-4 py-2 hover:bg-[#4C535B]">
             <Users size={20} className="text-white" />
