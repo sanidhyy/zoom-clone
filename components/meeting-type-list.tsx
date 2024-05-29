@@ -7,6 +7,7 @@ import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 
 import { MeetingModal } from "@/components/modals/meeting-modal";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -184,6 +185,7 @@ export const MeetingTypeList = () => {
           isLoading={isLoading}
         />
       )}
+
       <MeetingModal
         isOpen={meetingState === "isInstantMeeting"}
         onClose={() => setMeetingState(undefined)}
@@ -193,6 +195,22 @@ export const MeetingTypeList = () => {
         handleClick={createMeeting}
         isLoading={isLoading}
       />
+
+      <MeetingModal
+        isOpen={meetingState === "isJoiningMeeting"}
+        onClose={() => setMeetingState(undefined)}
+        title="Type the link here"
+        className="text-center"
+        buttonText="Join Meeting"
+        handleClick={() => router.push(values.link)}
+        isLoading={isLoading}
+      >
+        <Input
+          placeholder="Meeting link"
+          onChange={(e) => setValues({ ...values, link: e.target.value })}
+          className="border-none bg-dark-3"
+        />
+      </MeetingModal>
     </section>
   );
 };
