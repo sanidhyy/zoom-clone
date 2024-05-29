@@ -41,7 +41,7 @@ export const MeetingCard = ({
           </div>
         </div>
       </article>
-      <article className={cn("flex justify-center relative", {})}>
+      <article className={cn("relative flex justify-center", {})}>
         <div className="relative flex w-full max-sm:hidden">
           {avatarImages.map((img, index) => (
             <Image

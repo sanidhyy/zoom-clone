@@ -86,11 +86,11 @@
 
 @layer utilities {
   .flex-center {
-    @apply flex justify-center items-center;
+    @apply flex items-center justify-center;
   }
 
   .flex-between {
-    @apply flex justify-between items-center;
+    @apply flex items-center justify-between;
   }
 }
 

@@ -19,7 +19,7 @@ export const HomeCard = ({
   return (
     <button
       className={cn(
-        "p-0 text-left px-4 py-6 flex flex-col justify-between w-full xl:max-w-[270px] min-h-[260px] rounded-[14px] cursor-pointer",
+        "flex min-h-[260px] w-full cursor-pointer flex-col justify-between rounded-[14px] p-0 px-4 py-6 text-left xl:max-w-[270px]",
         className
       )}
       onClick={handleClick}

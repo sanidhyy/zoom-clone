@@ -101,8 +101,8 @@ export const CallList = ({ type }: CallListType) => {
               type === "ended"
                 ? "/icons/previous.svg"
                 : type === "upcoming"
-                ? "/icons/upcoming.svg"
-                : "/icons/recordings.svg"
+                  ? "/icons/upcoming.svg"
+                  : "/icons/recordings.svg"
             }
             isPreviousMeeting={type === "ended"}
             buttonIcon1={type === "recordings" ? "/icons/play.svg" : undefined}

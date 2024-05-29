@@ -135,12 +135,12 @@ export const MeetingTypeList = () => {
           isLoading={isLoading}
         >
           <div className="flex flex-col gap-2.5">
-            <label className="text-base text-normal leading-[22px] text-sky-2">
+            <label className="text-normal text-base leading-[22px] text-sky-2">
               Add a description
               <Textarea
                 rows={6}
                 placeholder="Add a description..."
-                className="border-none bg-dark-3 mt-2 resize-none"
+                className="mt-2 resize-none border-none bg-dark-3"
                 onChange={(e) => {
                   setValues({ ...values, description: e.target.value });
                 }}
@@ -149,7 +149,7 @@ export const MeetingTypeList = () => {
           </div>
 
           <div className="flex w-full flex-col gap-2.5">
-            <label className="flex flex-col text-base text-normal leading-[22px] text-sky-2">
+            <label className="text-normal flex flex-col text-base leading-[22px] text-sky-2">
               Select Date and Time
               <ReactDatePicker
                 selected={values.dateTime}
@@ -164,7 +164,7 @@ export const MeetingTypeList = () => {
                 timeIntervals={15}
                 timeCaption="time"
                 dateFormat="MMMM d, yyyy h:mm aa"
-                className="w-full rounded bg-dark-3 p-2 mt-2"
+                className="mt-2 w-full rounded bg-dark-3 p-2"
               />
             </label>
           </div>

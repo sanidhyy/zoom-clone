@@ -45,7 +45,7 @@ export const MobileNav = () => {
           </SheetClose>
 
           <div className="flex h-[calc(100vh_-_72px)] flex-col justify-between overflow-y-auto">
-            <section className="flex flex-col h-full gap-6 pt-16 text-white">
+            <section className="flex h-full flex-col gap-6 pt-16 text-white">
               {SIDEBAR_LINKS.map((item) => {
                 const isActive =
                   pathname === item.route ||
@@ -56,7 +56,7 @@ export const MobileNav = () => {
                     <Link
                       href={item.route}
                       className={cn(
-                        "flex gap-4 items-center p-4 rounded-lg w-full max-w-60",
+                        "flex w-full max-w-60 items-center gap-4 rounded-lg p-4",
                         {
                           "bg-blue-1": isActive,
                         }
