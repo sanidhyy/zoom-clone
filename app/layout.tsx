@@ -1,5 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
@@ -7,16 +7,19 @@ import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { Toaster } from "@/components/ui/toaster";
+import { siteConfig } from "@/config";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Yoom",
-  description: "Video calling app",
+export const viewport: Viewport = {
+  themeColor: "#0E78F9",
+  colorScheme: "dark",
 };
+
+export const metadata: Metadata = siteConfig;
 
 const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
   return (
