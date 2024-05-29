@@ -2,8 +2,9 @@
 
 import { type Call, type CallRecording } from "@stream-io/video-react-sdk";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { useToast } from "@/components/ui/use-toast";
 import { useGetCalls } from "@/hooks/use-get-calls";
 
 import { Loader } from "./loader";
@@ -15,6 +16,7 @@ type CallListType = {
 
 export const CallList = ({ type }: CallListType) => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
 
@@ -27,7 +29,7 @@ export const CallList = ({ type }: CallListType) => {
         return endedCalls;
 
       case "recordings":
-        return endedCalls;
+        return recordings;
 
       case "upcoming":
         return upcomingCalls;
@@ -53,6 +55,28 @@ export const CallList = ({ type }: CallListType) => {
     }
   };
 
+  useEffect(() => {
+    const fetchRecordings = async () => {
+      if (!callRecordings) return;
+
+      try {
+        const callData = await Promise.all(
+          callRecordings.map((call) => call.queryRecordings())
+        );
+
+        const recordings = callData
+          .filter((call) => call.recordings.length > 0)
+          .flatMap((call) => call.recordings);
+
+        setRecordings(recordings);
+      } catch (error) {
+        toast({ title: "Try again later." });
+      }
+    };
+
+    if (type === "recordings") fetchRecordings();
+  }, [type, callRecordings, toast]);
+
   const calls = getCalls();
   const noCallsMessage = getNoCallsMessage();
 
@@ -65,11 +89,12 @@ export const CallList = ({ type }: CallListType) => {
           <MeetingCard
             key={(call as Call).id || i}
             title={
-              (call as Call).state.custom.description.substring(0, 26) ||
+              (call as Call).state?.custom.description.substring(0, 26) ||
+              (call as CallRecording).filename.substring(0, 20) ||
               "No description"
             }
             date={
-              (call as Call).state.startsAt?.toLocaleString() ||
+              (call as Call).state?.startsAt?.toLocaleString() ||
               (call as CallRecording).start_time.toString()
             }
             icon={
