@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { MeetingModal } from "@/components/modals/meeting-modal";
+import { useToast } from "@/components/ui/use-toast";
 
 import { HomeCard } from "./home-card";
 
@@ -17,7 +18,9 @@ type MeetingState =
 
 export const MeetingTypeList = () => {
   const router = useRouter();
+  const { toast } = useToast();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [callDetails, setCallDetails] = useState<Call>();
   const [meetingState, setMeetingState] = useState<MeetingState>(undefined);
   const [values, setValues] = useState({
@@ -33,6 +36,15 @@ export const MeetingTypeList = () => {
     if (!streamClient || !user || !user?.id) return;
 
     try {
+      setIsLoading(true);
+
+      if (!values.dateTime) {
+        return toast({
+          title: "Please select a date and time.",
+          variant: "destructive",
+        });
+      }
+
       const id = crypto.randomUUID();
       const call = streamClient.call("default", id);
 
@@ -56,8 +68,19 @@ export const MeetingTypeList = () => {
       if (!values?.description) {
         router.push(`/meeting/${call.id}`);
       }
+
+      toast({
+        title: "Meeting created.",
+      });
     } catch (error) {
       console.error("CREATE_MEETING: ", error);
+
+      toast({
+        title: "Failed to create meeting.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -102,6 +125,7 @@ export const MeetingTypeList = () => {
         className="text-center"
         buttonText="Start Meeting"
         handleClick={createMeeting}
+        isLoading={isLoading}
       />
     </section>
   );
