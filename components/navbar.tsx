@@ -2,6 +2,8 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
+import { links } from "@/config";
+
 import { MobileNav } from "./mobile-nav";
 
 export const Navbar = () => {
@@ -25,6 +27,15 @@ export const Navbar = () => {
         <SignedIn>
           <UserButton afterSignOutUrl="/sign-in" />
         </SignedIn>
+
+        <Link
+          href={links.sourceCode}
+          target="_blank"
+          rel="noreferrer noopener"
+          title="Source Code"
+        >
+          <Image src="/icons/github.svg" alt="GitHub" height={80} width={80} />
+        </Link>
 
         <MobileNav />
       </div>
