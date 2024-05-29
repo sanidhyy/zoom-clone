@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
