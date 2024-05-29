@@ -1,6 +1,6 @@
 {
   "name": "zoom-clone",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,6 +8,67 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "author": {
+    "name": "Sanidhya Kumar Verma",
+    "email": "sanidhya.verma12345@gmail.com",
+    "url": "https://github.com/sanidhyy"
+  },
+  "description": "Modern Next.js powered Video calling app",
+  "keywords": [
+    "reactjs",
+    "nextjs",
+    "vercel",
+    "react",
+    "getstream",
+    "stream",
+    "shadcn",
+    "shadcn-ui",
+    "radix-ui",
+    "cn",
+    "clsx",
+    "zoom-clone",
+    "realtime-video",
+    "realtime-chat",
+    "live-audio",
+    "live-video",
+    "live-chat",
+    "radix-toast",
+    "lucide-react",
+    "next-themes",
+    "postcss",
+    "prettier",
+    "react-dom",
+    "tailwindcss",
+    "tailwindcss-animate",
+    "ui/ux",
+    "js",
+    "ts",
+    "javascript",
+    "typescript",
+    "eslint",
+    "html",
+    "css"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanidhyy/zoom-clone.git"
+  },
+  "homepage": "https://github.com/sanidhyy/zoom-clone#readme",
+  "bugs": {
+    "url": "https://github.com/sanidhyy/zoom-clone/issues",
+    "email": "sanidhya.verma12345@gmail.com"
+  },
+  "funding": [
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/sanidhy"
+    },
+    {
+      "type": "Buy me a coffee",
+      "url": "https://www.buymeacoffee.com/sanidhy"
+    }
+  ],
   "dependencies": {
     "@clerk/nextjs": "^5.1.3",
     "@radix-ui/react-dialog": "^1.0.5",
