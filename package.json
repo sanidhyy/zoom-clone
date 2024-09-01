@@ -90,7 +90,7 @@
   "devDependencies": {
     "@types/node": "^22",
     "@types/react": "^18",
-    "@types/react-datepicker": "^6.2.0",
+    "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^18",
     "eslint": "^9",
     "eslint-config-next": "14.2.3",
