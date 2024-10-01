@@ -70,7 +70,7 @@
     }
   ],
   "dependencies": {
-    "@clerk/nextjs": "^5.1.6",
+    "@clerk/nextjs": "^5.6.4",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
