@@ -76,7 +76,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.6",
     "@stream-io/node-sdk": "^0.4.19",
-    "@stream-io/video-react-sdk": "^1.7.27",
+    "@stream-io/video-react-sdk": "^1.14.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.486.0",
