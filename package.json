@@ -88,7 +88,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "^24",
     "@types/react": "^18",
     "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^19",
