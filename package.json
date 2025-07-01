@@ -82,7 +82,7 @@
     "lucide-react": "^0.511.0",
     "next": "14",
     "react": "^18",
-    "react-datepicker": "^8.3.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^18",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7"
