@@ -79,7 +79,7 @@
     "@stream-io/video-react-sdk": "^1.23.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.511.0",
+    "lucide-react": "^0.544.0",
     "next": "14",
     "react": "^18",
     "react-datepicker": "^8.7.0",
