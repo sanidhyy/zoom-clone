@@ -93,7 +93,7 @@
     "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.4.5",
+    "eslint-config-next": "16.0.6",
     "eslint-plugin-unused-imports": "^4.3.0",
     "postcss": "^8",
     "prettier": "^3.7.3",
