@@ -83,7 +83,7 @@
     "next": "14",
     "react": "^19",
     "react-datepicker": "^8.8.0",
-    "react-dom": "^18",
+    "react-dom": "^19",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7"
   },
