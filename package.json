@@ -81,7 +81,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
     "next": "14",
-    "react": "^18",
+    "react": "^19",
     "react-datepicker": "^8.8.0",
     "react-dom": "^18",
     "tailwind-merge": "^3.3.1",
