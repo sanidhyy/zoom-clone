@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const siteConfig: Metadata = {
-  title: "Yoom",
+  title: "Orbitz",
   description: "Modern Next.js powered Video calling app",
   keywords: [
     "reactjs",

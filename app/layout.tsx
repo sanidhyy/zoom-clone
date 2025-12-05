@@ -27,7 +27,7 @@ const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
       <ClerkProvider
         appearance={{
           layout: {
-            logoImageUrl: "/icons/yoom-logo.svg",
+            logoImageUrl: "/icons/logo.png",
             socialButtonsVariant: "iconButton",
           },
           variables: {
