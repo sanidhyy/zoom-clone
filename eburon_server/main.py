@@ -342,29 +342,63 @@ async def chat_message(
 @app.get("/api/models")
 async def list_models():
     """
-    List available chat models.
+    List available chat models (Ollama + Gemini).
     """
+    models = []
+    
+    # 1. Fetch Ollama Models (Beta)
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(f"{OLLAMA_BASE_URL}/api/tags")
+            if response.status_code == 200:
+                data = response.json()
+                for model in data.get("models", []):
+                    models.append({
+                        "id": model["name"],
+                        "name": model["name"].split(":")[0].title(),
+                        "description": f"Ollama locally hosted ({model['details']['parameter_size']})",
+                        "context_length": 4096, # Default/Estimated
+                        "provider": "Ollama"
+                    })
+    except Exception as e:
+        print(f"Failed to fetch Ollama models: {e}")
+        # Fallback if Ollama is down
+        models.append({
+             "id": "mistral:latest",
+             "name": "Mistral (Offline)",
+             "description": "Ollama service unavailable",
+             "context_length": 4096,
+             "provider": "Ollama"
+        })
+
+    # 2. Add Gemini Models (Pro)
+    gemini_models = [
+        {
+            "id": "gemini-2.0-flash-exp",
+            "name": "Gemini 2.0 Flash",
+            "description": "Next-gen multimodal, fastest",
+            "context_length": 1048576,
+             "provider": "Google"
+        },
+        {
+            "id": "gemini-1.5-pro",
+            "name": "Gemini 1.5 Pro",
+            "description": "Best quality, complex reasoning",
+            "context_length": 2097152,
+             "provider": "Google"
+        },
+        {
+             "id": "gemini-1.5-flash",
+             "name": "Gemini 1.5 Flash",
+             "description": "Fast and versatile",
+             "context_length": 1048576,
+             "provider": "Google"
+        }
+    ]
+    models.extend(gemini_models)
+
     return {
-        "models": [
-            {
-                "id": "mistral-large-3:675b-cloud",
-                "name": "Mistral Large 3",
-                "description": "Best quality, 675B parameters",
-                "context_length": 32768
-            },
-            {
-                "id": "cogito-2.1:671b-cloud",
-                "name": "Cogito 2.1",
-                "description": "Advanced reasoning, 671B parameters",
-                "context_length": 32768
-            },
-            {
-                "id": "llama3.2:1b",
-                "name": "Llama 3.2",
-                "description": "Fast and lightweight, 1B parameters",
-                "context_length": 8192
-            }
-        ],
+        "models": models,
         "provider": "Eburon Chat"
     }
 
