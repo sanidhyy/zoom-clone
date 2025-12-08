@@ -87,12 +87,12 @@ class TranscribeResponse(BaseModel):
 
 class TTSRequest(BaseModel):
     text: str
-    voice: str = "en-US-AriaNeural"  # Edge-TTS voice or Cartesia voice ID
-    tier: str = "beta"  # "beta" (Edge-TTS) or "pro" (Cartesia)
-    rate: int = 0  # -50 to +100 (Edge-TTS only)
-    pitch: int = 0  # -50 to +50 (Edge-TTS only)
-    speed: float = 1.0  # Cartesia speed multiplier
-    cartesia_voice_id: str = "228fca29-3a0a-435c-8728-5cb483251068"  # Default Cartesia voice
+    voice: str = "en-US-AriaNeural"  # Basic voice or Eburon Pro voice ID
+    tier: str = "beta"  # "beta" (Basic) or "pro" (Eburon Pro) 
+    rate: int = 0  # -50 to +100 (Basic only)
+    pitch: int = 0  # -50 to +50 (Basic only)
+    speed: float = 1.0  # Pro speed multiplier
+    pro_voice_id: str = "228fca29-3a0a-435c-8728-5cb483251068"  # Default Pro voice
 
 
 class TTSResponse(BaseModel):
@@ -378,17 +378,17 @@ async def realtime_speech(
     Convert text to speech.
     
     Tiers:
-    - **pro**: Cartesia Sonic-3 (high quality, emotional)
-    - **beta**: Edge-TTS (free, Microsoft voices)
+    - **pro**: Eburon Pro (high quality, emotional)
+    - **beta**: Basic (free, standard voices)
     
-    Pro (Cartesia) Voices:
-    - Use cartesia_voice_id field with voice ID
+    Pro Voices:
+    - Use pro_voice_id field with voice ID
     
     Beta (Edge-TTS) Voices:
     - en-US-AriaNeural, en-US-GuyNeural, en-GB-SoniaNeural, etc.
     """
     
-    # PRO: Cartesia TTS
+    # PRO: Eburon Pro TTS
     if request.tier.lower() == "pro":
         try:
             async with httpx.AsyncClient(timeout=60.0) as client:
@@ -404,7 +404,7 @@ async def realtime_speech(
                         "transcript": request.text,
                         "voice": {
                             "mode": "id",
-                            "id": request.cartesia_voice_id
+                            "id": request.pro_voice_id
                         },
                         "output_format": {
                             "container": "mp3",
@@ -430,17 +430,17 @@ async def realtime_speech(
                     media_type="audio/mpeg",
                     headers={
                         "Content-Disposition": "inline; filename=speech.mp3",
-                        "X-Eburon-Voice": request.cartesia_voice_id,
-                        "X-Eburon-Provider": "Cartesia-Pro",
+                        "X-Eburon-Voice": request.pro_voice_id,
+                        "X-Eburon-Provider": "Eburon-Pro",
                         "X-Eburon-Tier": "pro"
                     }
                 )
         except httpx.TimeoutException:
-            raise HTTPException(status_code=504, detail="Cartesia TTS timed out")
+            raise HTTPException(status_code=504, detail="Pro TTS timed out")
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Pro TTS failed: {str(e)}")
     
-    # BETA: Edge-TTS
+    # BETA: Basic TTS
     try:
         import edge_tts
         import io
@@ -466,7 +466,7 @@ async def realtime_speech(
             headers={
                 "Content-Disposition": "inline; filename=speech.mp3",
                 "X-Eburon-Voice": request.voice,
-                "X-Eburon-Provider": "Edge-TTS-Beta",
+                "X-Eburon-Provider": "Eburon-Basic",
                 "X-Eburon-Tier": "beta"
             }
         )
@@ -484,7 +484,7 @@ async def list_voices():
     """
     return {
         "pro": {
-            "provider": "Cartesia Sonic-3",
+            "provider": "Eburon Pro",
             "description": "High-quality emotional TTS",
             "voices": [
                 {
@@ -553,8 +553,8 @@ async def list_voices():
             ]
         },
         "beta": {
-            "provider": "Edge-TTS (Microsoft)",
-            "description": "Free Microsoft neural voices",
+            "provider": "Eburon Basic",
+            "description": "Free standard neural voices",
             "voices": [
                 {"id": "en-US-AriaNeural", "name": "Aria", "language": "English (US)", "gender": "Female"},
                 {"id": "en-US-GuyNeural", "name": "Guy", "language": "English (US)", "gender": "Male"},

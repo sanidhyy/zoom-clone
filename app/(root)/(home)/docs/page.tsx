@@ -460,7 +460,7 @@ print(result['transcript'])`}
             <code className="text-sm font-mono text-white/80">/api/realtime-speech</code>
           </div>
           <p className="text-sm text-white/60 mb-4">
-            Convert text to speech. Choose between Pro (Cartesia) or Beta (Edge-TTS) tier.
+            Convert text to speech. Choose between Pro (Eburon Pro) or Beta (Basic) tier.
           </p>
           
           <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Request Body</h4>
@@ -482,12 +482,12 @@ print(result['transcript'])`}
                 <tr className="border-b border-white/5">
                   <td className="p-3"><code className="text-blue-1">tier</code></td>
                   <td className="p-3">string</td>
-                  <td className="p-3">&quot;pro&quot; (Cartesia) or &quot;beta&quot; (Edge-TTS)</td>
+                  <td className="p-3">&quot;pro&quot; (Eburon Pro) or &quot;beta&quot; (Basic)</td>
                 </tr>
                 <tr className="border-b border-white/5">
-                  <td className="p-3"><code className="text-blue-1">cartesia_voice_id</code></td>
+                  <td className="p-3"><code className="text-blue-1">pro_voice_id</code></td>
                   <td className="p-3">string</td>
-                  <td className="p-3">Cartesia voice ID (Pro tier)</td>
+                  <td className="p-3">Eburon Pro voice ID (Pro tier)</td>
                 </tr>
                 <tr className="border-b border-white/5">
                   <td className="p-3"><code className="text-blue-1">voice</code></td>
@@ -508,7 +508,7 @@ print(result['transcript'])`}
         <div className="soft-card p-5 mb-4">
           <div className="flex items-center gap-2 mb-3">
             <span className="px-2 py-1 bg-blue-1/20 text-blue-1 text-xs font-bold rounded">PRO</span>
-            <span className="text-sm text-white/60">Cartesia Sonic-3</span>
+            <span className="text-sm text-white/60">Eburon Pro Sonic-3</span>
           </div>
           <div className="bg-black/30 rounded-lg overflow-hidden text-xs">
             <table className="w-full">
