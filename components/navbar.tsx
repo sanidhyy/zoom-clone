@@ -2,24 +2,22 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-import { links } from "@/config";
-
 import { MobileNav } from "./mobile-nav";
 
 export const Navbar = () => {
   return (
-    <nav className="flex-between fixed z-50 w-full bg-dark-1 px-6 py-4 lg:px-10">
-      <Link href="/" className="flex items-center gap-1">
+    <nav className="flex-between fixed z-50 w-full bg-black/80 backdrop-blur-xl px-6 py-4 lg:px-10 border-b border-white/5">
+      <Link href="/" className="flex items-center gap-3">
         <Image
-          src="/icons/logo.png"
-          alt="Orbitz logo"
-          width={32}
-          height={32}
+          src="https://zoomie.eburon.ai/icons/logo.png"
+          alt="Eburon logo"
+          width={40}
+          height={40}
           className="max-sm:size-10"
         />
 
-        <p className="text-[26px] font-extrabold text-white max-sm:hidden">
-          Orbitz
+        <p className="text-[22px] font-semibold text-white max-sm:hidden tracking-tight">
+          Eburon
         </p>
       </Link>
 
@@ -27,15 +25,6 @@ export const Navbar = () => {
         <SignedIn>
           <UserButton afterSignOutUrl="/sign-in" />
         </SignedIn>
-
-        <Link
-          href={links.sourceCode}
-          target="_blank"
-          rel="noreferrer noopener"
-          title="Source Code"
-        >
-          <Image src="/icons/github.svg" alt="GitHub" height={80} width={80} />
-        </Link>
 
         <MobileNav />
       </div>

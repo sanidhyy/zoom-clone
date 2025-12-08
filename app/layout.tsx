@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Roboto, Open_Sans } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
@@ -12,7 +12,16 @@ import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto"
+});
+
+const openSans = Open_Sans({ 
+  subsets: ["latin"],
+  variable: "--font-open-sans"
+});
 
 export const viewport: Viewport = {
   themeColor: "#0E78F9",
@@ -24,10 +33,16 @@ export const metadata: Metadata = siteConfig;
 const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+      </head>
       <ClerkProvider
         appearance={{
           layout: {
-            logoImageUrl: "/icons/logo.png",
+            logoImageUrl: "https://zoomie.eburon.ai/icons/logo.png",
             socialButtonsVariant: "iconButton",
           },
           variables: {
@@ -39,7 +54,7 @@ const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
           },
         }}
       >
-        <body className={cn("bg-dark-2", inter.className)}>
+        <body className={cn("min-h-screen bg-dark-2 font-sans antialiased", openSans.variable, roboto.variable)}>
           {children}
           <Toaster />
         </body>

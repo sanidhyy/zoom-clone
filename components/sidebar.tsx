@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,8 +10,8 @@ export const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between bg-dark-1 p-6 pt-28 text-white max-sm:hidden lg:w-[264px]">
-      <div className="flex flex-1 flex-col gap-6">
+    <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between bg-black/95 backdrop-blur-xl p-6 pt-28 text-white max-sm:hidden lg:w-[264px] border-r border-white/5">
+      <div className="flex flex-1 flex-col gap-2">
         {SIDEBAR_LINKS.map((item) => {
           const isActive =
             pathname === item.route || pathname.startsWith(`${item.route}/`);
@@ -22,20 +21,25 @@ export const Sidebar = () => {
               key={item.route}
               href={item.route}
               className={cn(
-                "flex items-center justify-start gap-4 rounded-lg p-4",
-                {
-                  "bg-blue-1": isActive,
-                }
+                "flex items-center justify-start gap-4 rounded-xl p-4 transition-all duration-300 ease-apple",
+                isActive
+                  ? "bg-white/10 text-white"
+                  : "text-white/60 hover:bg-white/5 hover:text-white"
               )}
             >
-              <Image
-                src={item.imgUrl}
-                alt={item.label}
-                width={24}
-                height={24}
-              />
+              <span
+                className={cn(
+                  "material-symbols-rounded text-[22px]",
+                  isActive && "filled"
+                )}
+              >
+                {item.icon}
+              </span>
 
-              <p className="text-lg font-semibold max-lg:hidden">
+              <p className={cn(
+                "text-[15px] font-medium max-lg:hidden tracking-tight",
+                isActive ? "text-white" : "text-inherit"
+              )}>
                 {item.label}
               </p>
             </Link>
@@ -45,3 +49,4 @@ export const Sidebar = () => {
     </section>
   );
 };
+

@@ -2,27 +2,32 @@ export const SIDEBAR_LINKS = [
   {
     label: "Home",
     route: "/",
-    imgUrl: "/icons/home.svg",
+    icon: "home",
   },
   {
     label: "Upcoming",
     route: "/upcoming",
-    imgUrl: "/icons/upcoming.svg",
+    icon: "event_upcoming",
   },
   {
     label: "Previous",
     route: "/previous",
-    imgUrl: "/icons/previous.svg",
+    icon: "history",
   },
   {
     label: "Recordings",
     route: "/recordings",
-    imgUrl: "/icons/video.svg",
+    icon: "videocam",
   },
   {
     label: "Personal Room",
     route: "/personal-room",
-    imgUrl: "/icons/add-personal.svg",
+    icon: "person",
+  },
+  {
+    label: "API Docs",
+    route: "/docs",
+    icon: "api",
   },
 ] as const;
 
