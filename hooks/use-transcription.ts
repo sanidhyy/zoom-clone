@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Call } from "@stream-io/video-react-sdk";
 
 interface Transcript {
   id: string;
@@ -12,16 +13,17 @@ interface Transcript {
 interface UseTranscriptionOptions {
   meetingId: string;
   userName?: string;
+  call?: Call;
   onTranscript?: (transcript: Transcript) => void;
 }
 
-export function useTranscription({ meetingId, userName, onTranscript }: UseTranscriptionOptions) {
+export function useTranscription({ meetingId, userName, call, onTranscript }: UseTranscriptionOptions) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [currentText, setCurrentText] = useState("");
   const [apiKey, setApiKey] = useState<string | null>(null);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -52,7 +54,7 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
   // Save transcript to Supabase via API
   const saveTranscript = useCallback(async (text: string, isFinal: boolean) => {
     if (!apiKey || !meetingId || !text.trim()) return;
-    
+
     try {
       await fetch("/api/transcribe/live", {
         method: "POST",
@@ -78,17 +80,17 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current = null;
     }
-    
+
     if (socketRef.current) {
       socketRef.current.close();
       socketRef.current = null;
     }
-    
+
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
-    
+
     setIsEnabled(false);
     setIsConnecting(false);
   }, []);
@@ -108,45 +110,56 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
         },
       });
 
-      // 2. Get System Audio (Display Media)
-      // Note: User must select a tab/window with audio and check "Share Audio"
-      let sysStream: MediaStream | null = null;
-      try {
-        sysStream = await navigator.mediaDevices.getDisplayMedia({
-          video: true, // Video is required to capture system audio in most browsers
-          audio: {
-            echoCancellation: false,
-            noiseSuppression: false,
-            autoGainControl: false,
-          },
-        });
-      } catch (err) {
-        console.warn("System audio sharing cancelled or failed", err);
-      }
-
-      // 3. Mix Audio Streams
+      // 2. Mix Audio Streams
       const audioContext = new AudioContext();
       const dest = audioContext.createMediaStreamDestination();
 
       const micSource = audioContext.createMediaStreamSource(micStream);
       micSource.connect(dest);
 
-      if (sysStream) {
-        // Extract audio track from display media
-        const sysAudioTrack = sysStream.getAudioTracks()[0];
-        if (sysAudioTrack) {
-          const sysSource = audioContext.createMediaStreamSource(new MediaStream([sysAudioTrack]));
+      // Add Remote Participants Audio
+      if (call) {
+        const participants = call.state.participants;
+        participants.forEach((p) => {
+          if (!p.isLocal) {
+            // @ts-ignore: handling Stream SDK track structure flexibility
+            const audioTrack = p.publishedTracks.find((t) => t.audioTrack)?.audioTrack || p.publishedTracks.find((t) => t.track?.kind === "audio")?.track;
+            
+            if (audioTrack) {
+               try {
+                 const remoteStream = new MediaStream([audioTrack]);
+                 const remoteSource = audioContext.createMediaStreamSource(remoteStream);
+                 remoteSource.connect(dest);
+               } catch (e) {
+                 console.warn(`Failed to connect audio for ${p.userId}`, e);
+               }
+            }
+          }
+        });
+      }
+
+      // Check for Screen Share Audio
+       if (call) {
+        const localParticipant = call.state.localParticipant;
+        const screenShareTrack = localParticipant?.publishedTracks.find(
+          (t) => t.source === "screen_share_audio"
+        )?.track;
+
+        if (screenShareTrack) {
+          console.log("Adding screen share audio to mix");
+          const sysStream = new MediaStream([screenShareTrack]);
+          const sysSource = audioContext.createMediaStreamSource(sysStream);
           sysSource.connect(dest);
         }
       }
 
       const mixedStream = dest.stream;
-      streamRef.current = mixedStream; // Keep reference to close later
+      streamRef.current = mixedStream;
 
-      // 4. Connect to Eburon Server Proxy (WebSocket)
+      // 3. Connect to Proxy
       const protocol = process.env.NEXT_PUBLIC_SERVER_URL?.startsWith("https") ? "wss" : "ws";
       const host = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/^https?:\/\//, "");
-      const wsUrl = `${protocol}://${host}/transcribe/ws?api_key=${apiKey}`; // Pass Eburon Key
+      const wsUrl = `${protocol}://${host}/transcribe/ws?api_key=${apiKey}`;
 
       console.log("Connecting to Transcription Proxy:", wsUrl);
 
@@ -157,7 +170,6 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
         setIsConnecting(false);
         setIsEnabled(true);
 
-        // Start recording the MIXED stream
         const mediaRecorder = new MediaRecorder(mixedStream, {
           mimeType: "audio/webm;codecs=opus",
         });
@@ -169,19 +181,16 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
           }
         };
 
-        // Send data every 250ms
         mediaRecorder.start(250);
       };
 
       socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          // Eburon Proxy format: { channel: { alternatives: [{ transcript: "..." }] }, is_final: boolean }
           const transcript = data.channel?.alternatives?.[0]?.transcript;
-          
+
           if (transcript) {
             const isFinal = data.is_final;
-            
             if (isFinal) {
               const newTranscript: Transcript = {
                 id: `${Date.now()}-${Math.random()}`,
@@ -189,12 +198,9 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
                 isFinal: true,
                 timestamp: new Date(),
               };
-              
               setTranscripts(prev => [...prev.slice(-20), newTranscript]);
               setCurrentText("");
               onTranscript?.(newTranscript);
-              
-              // Save to Supabase (Maintain existing logic)
               saveTranscript(transcript, true);
             } else {
               setCurrentText(transcript);
@@ -220,7 +226,7 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
       setIsConnecting(false);
       stopTranscription();
     }
-  }, [isEnabled, isConnecting, apiKey, onTranscript, saveTranscript, stopTranscription]);
+  }, [isEnabled, isConnecting, apiKey, onTranscript, saveTranscript, stopTranscription, call]);
 
   const toggleTranscription = useCallback(() => {
     if (isEnabled) {
@@ -230,7 +236,6 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
     }
   }, [isEnabled, startTranscription, stopTranscription]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopTranscription();
@@ -249,4 +254,3 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
     stopTranscription,
   };
 }
-

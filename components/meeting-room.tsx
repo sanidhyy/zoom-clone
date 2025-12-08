@@ -53,7 +53,7 @@ export const MeetingRoom = () => {
     transcripts,
     currentText,
     toggleTranscription,
-  } = useTranscription({ meetingId, userName });
+  } = useTranscription({ meetingId, userName, call });
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
