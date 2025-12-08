@@ -18,14 +18,14 @@ It combines a premium Apple-inspired design with powerful backend services to de
 
 ### 🧠 Advanced AI Capabilities (New)
 - **Tiered Text-to-Speech (TTS)**:
-    - **Pro Tier**: **Cartesia Sonic-3** (High-Fidelity, Emotional, Low Latency).
-    - **Beta Tier**: **Edge-TTS** (Microsoft Neural Voices, Free).
-- **Live Translation**: Real-time speech-to-text via **Deepgram** translated instantly to your target language.
-- **Gemini Live Audio**: Real-time, bidirectional audio/video streaming with **Google Gemini 2.0 Flash**. Talk to the AI naturally with interruptibility.
+    - **Pro Tier**: **Eburon Pro Voice** (High-Fidelity, Emotional, Low Latency).
+    - **Beta Tier**: **Eburon Standard Voice** (Reliable Neural Voices, Free).
+- **Live Translation**: Real-time speech-to-text via **Eburon Listening Engine** translated instantly to your target language.
+- **Live Audio Intelligence**: Real-time, bidirectional audio/video streaming with **Eburon Advanced AI**. Talk to the AI naturally with interruptibility.
 - **Pro Tier Chat Agent**:
-    - Powered by **Gemini 2.0 Flash Thinking** (Experimental).
+    - Powered by **Eburon Thinking Model** (Experimental).
     - **Thinking Mode**: 8k token budget for deep reasoning.
-    - **Tools**: Live Google Search and Python Code Execution.
+    - **Tools**: Live Search and Code Execution.
 - **Eburon Transcription API**: Custom FastApi server acting as a unified AI gateway.
 
 ### 🎨 Premium Design
@@ -49,9 +49,9 @@ It combines a premium Apple-inspired design with powerful backend services to de
 - **Video/Audio SDK**: [GetStream Video](https://getstream.io/video/docs/react/)
 - **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
 - **AI Gateway Server**: Python [FastAPI](https://fastapi.tiangolo.com/)
-- **Live Transcription**: [Deepgram Nova-2](https://deepgram.com/)
-- **LLM / Agents**: [Google Gemini](https://ai.google.dev/) (via `google-genai`)
-- **TTS**: [Cartesia](https://cartesia.ai/) & Edge-TTS
+- **Live Transcription**: [Eburon Listening Engine](https://eburon.ai)
+- **LLM / Agents**: [Eburon Intelligence](https://eburon.ai)
+- **TTS**: [Eburon Voice Engine](https://eburon.ai)
 
 ---
 
@@ -140,9 +140,9 @@ Once the server is running, visit:
 - **ReDoc**: [http://localhost:3744/redoc](http://localhost:3744/redoc)
 
 ### Key Endpoints
-- `POST /api/message`: Chat completion (Tiered: Beta/Ollama, Pro/Gemini).
-- `POST /api/realtime-speech`: TTS (Tiered: Beta/Edge, Pro/Cartesia).
-- `WS /api/live-audio`: Bidirectional audio/video streaming with Gemini Live.
+- `POST /api/message`: Chat completion (Tiered: Standard/Basic, Pro/Advanced).
+- `POST /api/realtime-speech`: TTS (Tiered: Standard, Pro).
+- `WS /api/live-audio`: Bidirectional audio/video streaming with Eburon Live AI.
 
 ---
 
