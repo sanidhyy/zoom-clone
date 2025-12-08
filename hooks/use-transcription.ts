@@ -94,41 +94,72 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
   }, []);
 
   const startTranscription = useCallback(async () => {
-    if (isEnabled || isConnecting) return;
+    if (isEnabled || isConnecting || !apiKey) return;
 
     try {
       setIsConnecting(true);
 
-      // Get microphone access
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      // 1. Get Microphone Stream
+      const micStream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-        }
+          autoGainControl: true,
+        },
       });
-      streamRef.current = stream;
 
-      const apiKey = process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY;
-      if (!apiKey) {
-        console.error("NEXT_PUBLIC_DEEPGRAM_API_KEY is missing");
-        setIsConnecting(false);
-        return;
+      // 2. Get System Audio (Display Media)
+      // Note: User must select a tab/window with audio and check "Share Audio"
+      let sysStream: MediaStream | null = null;
+      try {
+        sysStream = await navigator.mediaDevices.getDisplayMedia({
+          video: true, // Video is required to capture system audio in most browsers
+          audio: {
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false,
+          },
+        });
+      } catch (err) {
+        console.warn("System audio sharing cancelled or failed", err);
       }
 
-      // Connect to Deepgram WebSocket
-      const socket = new WebSocket(
-        `wss://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&interim_results=true&language=en`,
-        ["token", apiKey]
-      );
+      // 3. Mix Audio Streams
+      const audioContext = new AudioContext();
+      const dest = audioContext.createMediaStreamDestination();
+
+      const micSource = audioContext.createMediaStreamSource(micStream);
+      micSource.connect(dest);
+
+      if (sysStream) {
+        // Extract audio track from display media
+        const sysAudioTrack = sysStream.getAudioTracks()[0];
+        if (sysAudioTrack) {
+          const sysSource = audioContext.createMediaStreamSource(new MediaStream([sysAudioTrack]));
+          sysSource.connect(dest);
+        }
+      }
+
+      const mixedStream = dest.stream;
+      streamRef.current = mixedStream; // Keep reference to close later
+
+      // 4. Connect to Eburon Server Proxy (WebSocket)
+      const protocol = process.env.NEXT_PUBLIC_SERVER_URL?.startsWith("https") ? "wss" : "ws";
+      const host = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/^https?:\/\//, "");
+      const wsUrl = `${protocol}://${host}/transcribe/ws?api_key=${apiKey}`; // Pass Eburon Key
+
+      console.log("Connecting to Transcription Proxy:", wsUrl);
+
+      const socket = new WebSocket(wsUrl);
       socketRef.current = socket;
 
       socket.onopen = () => {
         setIsConnecting(false);
         setIsEnabled(true);
 
-        // Start recording
-        const mediaRecorder = new MediaRecorder(stream, {
-          mimeType: "audio/webm",
+        // Start recording the MIXED stream
+        const mediaRecorder = new MediaRecorder(mixedStream, {
+          mimeType: "audio/webm;codecs=opus",
         });
         mediaRecorderRef.current = mediaRecorder;
 
@@ -138,12 +169,14 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
           }
         };
 
+        // Send data every 250ms
         mediaRecorder.start(250);
       };
 
       socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+          // Eburon Proxy format: { channel: { alternatives: [{ transcript: "..." }] }, is_final: boolean }
           const transcript = data.channel?.alternatives?.[0]?.transcript;
           
           if (transcript) {
@@ -161,23 +194,24 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
               setCurrentText("");
               onTranscript?.(newTranscript);
               
-              // Save to Supabase with API key and meeting ID
+              // Save to Supabase (Maintain existing logic)
               saveTranscript(transcript, true);
             } else {
               setCurrentText(transcript);
             }
           }
-        } catch {
-          // Ignore parse errors
+        } catch (e) {
+          console.error("Error parsing transcript:", e);
         }
       };
 
-      socket.onerror = () => {
-        console.error("Transcription connection error");
+      socket.onerror = (e) => {
+        console.error("Transcription WebSocket error:", e);
         stopTranscription();
       };
 
       socket.onclose = () => {
+        console.log("Transcription WebSocket closed");
         stopTranscription();
       };
 
@@ -186,7 +220,7 @@ export function useTranscription({ meetingId, userName, onTranscript }: UseTrans
       setIsConnecting(false);
       stopTranscription();
     }
-  }, [isEnabled, isConnecting, onTranscript, saveTranscript, stopTranscription]);
+  }, [isEnabled, isConnecting, apiKey, onTranscript, saveTranscript, stopTranscription]);
 
   const toggleTranscription = useCallback(() => {
     if (isEnabled) {

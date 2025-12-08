@@ -657,6 +657,91 @@ async def live_audio_endpoint(websocket: WebSocket):
             pass
 
 
+@app.websocket("/transcribe/ws")
+async def transcribe_websocket(websocket: WebSocket):
+    await websocket.accept()
+    
+    try:
+        # 1. Validate Deepgram Key
+        if not DEEPGRAM_API_KEY:
+             print("Error: DEEPGRAM_API_KEY missing")
+             await websocket.close(code=1011, reason="Server misconfiguration")
+             return
+
+        # 2. Setup Deepgram Connection
+        from deepgram import DeepgramClient, LiveTranscriptionEvents, LiveOptions
+        
+        # Initialize client
+        deepgram = DeepgramClient(DEEPGRAM_API_KEY)
+        dg_connection = deepgram.listen.asyncwebsocket.v("1")
+
+        # 3. Define Event Handlers
+        async def on_message(self, result, **kwargs):
+            try:
+                if result.channel and result.channel.alternatives:
+                    alt = result.channel.alternatives[0]
+                    transcript = alt.transcript
+                    is_final = result.is_final
+                    
+                    if transcript:
+                        response_data = {
+                            "channel": {
+                                "alternatives": [{
+                                    "transcript": transcript
+                                }]
+                            },
+                            "is_final": is_final
+                        }
+                        await websocket.send_json(response_data)
+            except Exception as e:
+                print(f"Error sending to client: {e}")
+
+        async def on_metadata(self, metadata, **kwargs):
+            # Optional: Forward metadata if needed
+            pass
+
+        async def on_error(self, error, **kwargs):
+            print(f"Deepgram Error: {error}")
+
+        # Register handlers
+        dg_connection.on(LiveTranscriptionEvents.Transcript, on_message)
+        dg_connection.on(LiveTranscriptionEvents.Metadata, on_metadata)
+        dg_connection.on(LiveTranscriptionEvents.Error, on_error)
+
+        # 4. Connect to Deepgram
+        options = LiveOptions(
+            model="nova-2", 
+            language="en-US", 
+            smart_format=True, 
+            interim_results=True,
+            vad_events=True
+        )
+        
+        if await dg_connection.start(options) is False:
+            print("Failed to start Deepgram connection")
+            await websocket.close(code=1011, reason="Deepgram connection failed")
+            return
+
+        # 5. Proxy Loop (Client Audio -> Deepgram)
+        try:
+            while True:
+                data = await websocket.receive_bytes()
+                await dg_connection.send(data)
+        except WebSocketDisconnect:
+            print("Client disconnected")
+        except Exception as e:
+            print(f"Connection loop error: {e}")
+        finally:
+            await dg_connection.finish()
+
+    except Exception as e:
+        print(f"WebSocket Setup Error: {e}")
+        try:
+            await websocket.close(code=1011, reason=str(e))
+        except:
+            pass
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=3744)
