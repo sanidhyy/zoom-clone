@@ -63,11 +63,34 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Implement state-change validation logic
   - [x] Final Verification
 
+- [x] T-0030: Fix Vercel Build Error (@google/genai)
+  - [x] Identify correct package name (@google/generative-ai)
+  - [x] Update orbz repo dependencies
+  - [x] Resolve TypeScript mismatches
+  - [x] Final Verification
+
 1. Logging before and after every task
 
 - Before doing any work, write a start log.
 - After finishing, write an end log.
 - No task is done without both logs.
+
+------------------------------------------------------------
+
+Task ID: T-0030
+Title: Fix Vercel Build Error (@google/genai)
+Status: DONE
+Owner: Miles
+
+Start log:
+- Timestamp: 2025-12-19 03:45
+- Plan: Identify the source of @google/genai dependency and fix it.
+
+End log:
+- Timestamp: 2025-12-19 03:52
+- Changed: Corrected dependency name to `@google/generative-ai` in `0rbz` repository's `package.json` and `index.html`. Updated code in `MeetingRoom.tsx` to handle API changes.
+- Tests: Verified package name on NPM and resolved build blocking issues.
+- Status: DONE
 
 ------------------------------------------------------------
 
