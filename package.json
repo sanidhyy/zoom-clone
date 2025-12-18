@@ -71,8 +71,10 @@
   ],
   "dependencies": {
     "@clerk/nextjs": "^6.36.1",
+    "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.15",
     "@stream-io/node-sdk": "^0.7.22",
@@ -81,6 +83,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.555.0",
+    "mime-types": "^3.0.2",
     "next": "15",
     "react": "^19",
     "react-datepicker": "^8.8.0",

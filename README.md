@@ -8,33 +8,65 @@ It combines a premium Apple-inspired design with powerful backend services to de
 
 ---
 
-## 🚀 Key Features
+## 🌟 The Eburon Experience: A Walkthrough
 
-### 📹 Video & Audio
+### 🚀 1. Opening the App
 
-- **Crystal Clear Calls**: Powered by **GetStream.io** for low-latency HD video and audio.
-- **Screen Sharing**: Seamless screen sharing capabilities.
-- **Recording**: Record meetings and view them later.
-- **Personal Rooms**: Dedicated meeting links for instant calls.
+When users first open the **Eburon** app, they are greeted by a clean, welcoming dashboard. The interface is designed to be intuitive and clutter-free, allowing for immediate focus on collaboration.
 
-### 🧠 Advanced AI Capabilities (New)
+- **Customization**: Select preferred themes (Light or Dark mode).
+- **Profile**: Personalize avatars and set preferred language settings for a tailored experience.
+- **Dashboard**: The home screen showcases upcoming meetings, recent transcripts, and quick links to start or join a call instantly.
 
-- **Tiered Text-to-Speech (TTS)**:
-  - **Pro Tier**: **Eburon Pro Voice** (High-Fidelity, Emotional, Low Latency).
-  - **Beta Tier**: **Eburon Standard Voice** (Reliable Neural Voices, Free).
-- **Live Translation**: Real-time speech-to-text via **Eburon Listening Engine** translated instantly to your target language.
-- **Live Audio Intelligence**: Real-time, bidirectional audio/video streaming with **Eburon Advanced AI**. Talk to the AI naturally with interruptibility.
-- **Pro Tier Chat Agent**:
-  - Powered by **Eburon Thinking Model** (Experimental).
-  - **Thinking Mode**: 8k token budget for deep reasoning.
-  - **Tools**: Live Search and Code Execution.
-- **Eburon Transcription API**: Custom FastApi server acting as a unified AI gateway.
+### 📞 2. Joining a Meeting
 
-### 🎨 Premium Design
+With just a single click, users can join a scheduled meeting or start a new one.
 
-- **Apple-Style Aesthetic**: Glassmorphism, blurred backgrounds, and soft shadows.
-- **Responsive**: Fully optimized for Desktop, Tablet, and Mobile.
-- **Modern Typography**: Open Sans (Body) and Roboto (Heading) font stack.
+- **Automatic Setup**: As they enter the virtual meeting room, **Eburon** automatically sets up real-time transcription, translation, and any selected AI features.
+- **Language Selection**: Choose the languages you want to hear and speak; the app handles the rest in real-time.
+
+### 💬 3. In-Meeting Experience
+
+During the meeting, the power of **Eburon**'s real-time engines shines.
+
+- **Live Transcription**: Subtitles appear on screen character-by-character at an unmatchable pace, mirroring natural speech.
+- **Nuance Preservation**: The AI preserves natural nuances in the speaker's chosen language.
+- **Document Translation**: If a document is shared in another language, **Eburon** overlays real-time translations seamlessly, ensuring everyone stays on the same page.
+
+### 🤖 4. AI Tools in Action
+
+**Eburon** isn't just a meeting room; it's an AI-driven collaboration platform.
+
+- **AI Facilitator**: Keeps things on track, gently guiding the agenda and ensuring everyone participates.
+- **Active Engagement**: Rely on AI for quick polls, presentation tips, or moderating breakout rooms for guided discussions.
+- **Post-Meeting Intelligence**: After the session, the AI generates a detailed summary and action item list, shared instantly with all participants.
+
+---
+
+## 💎 Premium AI Add-ons
+
+**Eburon** offers a powerful set of 20 premium add-ons to make every meeting incredibly productive and user-friendly:
+
+1. **Automatic Meeting Summaries & Action Items**: AI-generated summaries and task lists post-meeting.
+2. **Real-Time Language Coaching**: Language improvement tips in a refined sidebar.
+3. **Interactive Whiteboard with AI**: Neatens sketches and creates polished diagrams automatically.
+4. **Contextual Search**: Find documents, notes, or previous transcriptions without leaving the app.
+5. **Meeting Templates**: Pre-set templates for different meeting types (e.g., Standup, Brainstorming).
+6. **AI Noise Cancellation**: Enhance voices and eliminate background noise with advanced filtering.
+7. **Smart Scheduling Assistant**: Suggests optimal meeting times and handles invites.
+8. **Custom Avatars & Backgrounds**: Personalized avatars and AI-generated virtual backgrounds.
+9. **Sentiment Analysis**: Gauge the meeting's mood (Vibe Indicator) and offer engagement tips.
+10. **Translation Overlays for Documents**: Real-time document translation overlays for shared content.
+11. **Transcription & Searchable Archives**: Searchable transcripts of all your previous meetings.
+12. **AI Meeting Facilitator**: Keeps the meeting on track and strictly adheres to the agenda.
+13. **Multi-Device Sync**: Seamless switching between your devices during an active call.
+14. **Custom Polls**: Instant polls and feedback forms triggered during meetings.
+15. **Presentation Assistance**: Real-time tips and visuals for presenters to maximize impact.
+16. **Integrated Task Manager**: Turn action items directly into tasks within the app's CRM.
+17. **Virtual Hand-Raising Queue**: Manage speakers with an intelligent queue system.
+18. **Breakout Room AI Moderators**: AI moderation in breakout rooms for focused, guided discussions.
+19. **Emotion Recognition**: Detects nuances and suggests empathetic responses.
+20. **Meeting Branding Customization**: Add company logos and themes for a professional look.
 
 ---
 
@@ -44,145 +76,24 @@ It combines a premium Apple-inspired design with powerful backend services to de
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + Tailwind Animate
-- **UI Components**: Shadcn/UI, Radix UI
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Authentication**: [Clerk](https://clerk.com/)
-- **State Management**: React Hooks + Local State
 
 ### Backend & AI Services
 
 - **Video/Audio SDK**: [GetStream Video](https://getstream.io/video/docs/react/)
-- **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
-- **AI Gateway Server**: Python [FastAPI](https://fastapi.tiangolo.com/)
-- **Live Transcription**: [Eburon Listening Engine](https://eburon.ai)
-- **LLM / Agents**: [Eburon Intelligence](https://eburon.ai)
-- **TTS**: [Eburon Voice Engine](https://eburon.ai)
+- **Database**: [Supabase](https://supabase.com/)
+- **AI Intelligence**: [Eburon AI Engine](https://eburon.ai)
+- **Real-time Engine**: [Eburon Listening Engine](https://eburon.ai)
 
 ---
 
-## ⚡ Getting Started
+### ⚡ Getting Started
 
-### Prerequisites
-
-- **Node.js**: v18 or higher
-- **Python**: v3.10 or higher
-- **npm** or **yarn** or **pnpm**
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/eburon.git
-cd eburon
-```
-
-### 2. Frontend Setup
-
-Install dependencies:
-
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
-
-Set up environment variables in `.env.local`:
-
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
-
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-
-NEXT_PUBLIC_STREAM_API_KEY=...
-STREAM_SECRET_KEY=...
-
-NEXT_PUBLIC_SERVER_URL=http://localhost:3744
-NEXT_PUBLIC_DEEPGRAM_API_KEY=...
-CARTESIA_API_KEY=...
-```
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) (or the port shown in terminal).
-
-### 3. AI Server Setup (Eburon Server)
-
-Navigate to the server directory:
-
-```bash
-cd eburon_server
-```
-
-Create a virtual environment:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-Install Python dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Set up environment variables (create a `.env` file in `eburon_server/` or export them):
-
-```bash
-export GEMINI_API_KEY=...
-export CARTESIA_API_KEY=...
-export DEEPGRAM_API_KEY=...
-```
-
-Run the FastAPI server:
-
-```bash
-python main.py
-```
-
-The server will start on port `3744`.
+1. **Install dependencies**: `npm install`
+2. **Setup environment**: Copy `.env.example` to `.env.local` and add your keys.
+3. **Run the app**: `npm run dev`
 
 ---
 
-## 📚 API Documentation
-
-The Eburon Server comes with automatic interactive documentation.
-Once the server is running, visit:
-
-- **Swagger UI**: [http://localhost:3744/docs](http://localhost:3744/docs)
-- **ReDoc**: [http://localhost:3744/redoc](http://localhost:3744/redoc)
-
-### Key Endpoints
-
-- `POST /api/message`: Chat completion (Tiered: Standard/Basic, Pro/Advanced).
-- `POST /api/realtime-speech`: TTS (Tiered: Standard, Pro).
-- `WS /api/live-audio`: Bidirectional audio/video streaming with Eburon Live AI.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-_Built with ❤️ by Eburon Development_
+Built with ❤️ by Eburon Development

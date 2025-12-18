@@ -16,7 +16,7 @@ interface LiveCaptionsProps {
 
 const TypedText = ({ text, className }: { text: string; className?: string }) => {
   const [displayedText, setDisplayedText] = useState("");
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!text) {
@@ -24,43 +24,49 @@ const TypedText = ({ text, className }: { text: string; className?: string }) =>
       return;
     }
 
-    // If text changed, we want to start from where we are and catch up
-    // However, for interim transcripts, they often change RAPIDLY as STT refines it.
-    // To keep it feeling "human", we only append if the new text starts with the old text,
-    // or we jump forward if it's a completely new sentence/segment.
-    
-    // Simplest robust way for live STT: 
-    // If the target text is longer than displayed, type forward.
-    // If it's shorter (STT refinement correction), adjust immediately to avoid "deletion" animations which look jarring.
-    
+    // Immediate sync for corrections or new segments
     if (text.length < displayedText.length || !text.startsWith(displayedText)) {
       setDisplayedText(text);
       return;
     }
 
-    if (displayedText.length < text.length) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      
-      const typeNext = () => {
-        setDisplayedText(prev => {
-          if (prev.length < text.length) {
-            // Take the next character
-            return text.slice(0, prev.length + 1);
+    const typeNext = () => {
+      setDisplayedText(prev => {
+        if (prev.length < text.length) {
+          const nextChar = text[prev.length];
+          const nextPrev = text.slice(0, prev.length + 1);
+          
+          // Determine next delay
+          let delay = 40; // Base speed
+          
+          // Pause slightly longer at sentence/clause boundaries
+          if (/[.!?,]/.test(nextChar)) {
+            delay = 150;
+          } else if (nextChar === " ") {
+            delay = 30; // Quick space
           }
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          return prev;
-        });
-      };
+          
+          // Speed up if we're falling behind
+          const gap = text.length - nextPrev.length;
+          if (gap > 30) delay = 5;
+          else if (gap > 15) delay = 20;
 
-      // Natural speed: roughly 50ms per char, but faster if gap is large
-      const gap = text.length - displayedText.length;
-      const speed = gap > 20 ? 10 : gap > 10 ? 30 : 50;
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+          timeoutRef.current = setTimeout(typeNext, delay);
+          
+          return nextPrev;
+        }
+        return prev;
+      });
+    };
 
-      intervalRef.current = setInterval(typeNext, speed);
+    if (displayedText.length < text.length && !timeoutRef.current) {
+      typeNext();
     }
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     };
   }, [text, displayedText]);
 

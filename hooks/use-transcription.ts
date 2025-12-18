@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Call } from "@stream-io/video-react-sdk";
+import { AudioEnhancer } from "@/lib/audio/enhancer";
 
 interface Transcript {
   id: string;
@@ -53,27 +54,25 @@ export function useTranscription({ meetingId, userName, call, onTranscript }: Us
 
   // Save transcript to Supabase via API
   const saveTranscript = useCallback(async (text: string, isFinal: boolean) => {
-    if (!apiKey || !meetingId || !text.trim()) return;
+    if (!meetingId || !text.trim()) return;
 
     try {
-      await fetch("/api/transcribe/live", {
+      await fetch("/api/transcribe/save", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "X-Meeting-ID": meetingId,
         },
         body: JSON.stringify({
-          meeting_id: meetingId,
-          text: text,
+          session_id: meetingId,
           user_name: userName || "Unknown",
+          original_text: text,
           is_final: isFinal,
         }),
       });
     } catch (error) {
       console.error("Failed to save transcript:", error);
     }
-  }, [apiKey, meetingId, userName]);
+  }, [meetingId, userName]);
 
   const stopTranscription = useCallback(() => {
     if (mediaRecorderRef.current) {
@@ -96,12 +95,11 @@ export function useTranscription({ meetingId, userName, call, onTranscript }: Us
   }, []);
 
   const startTranscription = useCallback(async () => {
-    if (isEnabled || isConnecting || !apiKey) return;
+    if (isEnabled || isConnecting) return;
 
     try {
       setIsConnecting(true);
 
-      // 1. Get Microphone Stream
       const micStream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -110,67 +108,47 @@ export function useTranscription({ meetingId, userName, call, onTranscript }: Us
         },
       });
 
-      // 2. Mix Audio Streams
       const audioContext = new AudioContext();
       const dest = audioContext.createMediaStreamDestination();
-
       const micSource = audioContext.createMediaStreamSource(micStream);
       micSource.connect(dest);
 
-      // Add Remote Participants Audio
       if (call) {
-        const participants = call.state.participants;
-        participants.forEach((p) => {
-          if (!p.isLocal) {
-            // @ts-ignore: handling Stream SDK track structure flexibility
+        call.state.participants.forEach((p) => {
+          // @ts-ignore
+          if (!p.isLocalParticipant && !p.isLocal) {
+            // @ts-ignore
             const audioTrack = p.publishedTracks.find((t) => t.audioTrack)?.audioTrack || p.publishedTracks.find((t) => t.track?.kind === "audio")?.track;
-            
             if (audioTrack) {
-               try {
-                 const remoteStream = new MediaStream([audioTrack]);
-                 const remoteSource = audioContext.createMediaStreamSource(remoteStream);
-                 remoteSource.connect(dest);
-               } catch (e) {
-                 console.warn(`Failed to connect audio for ${p.userId}`, e);
-               }
+              try {
+                const remoteStream = new MediaStream([audioTrack]);
+                const remoteSource = audioContext.createMediaStreamSource(remoteStream);
+                remoteSource.connect(dest);
+              } catch (e) {}
             }
           }
         });
       }
 
-      // Check for Screen Share Audio
-       if (call) {
-        const localParticipant = call.state.localParticipant;
-        const screenShareTrack = localParticipant?.publishedTracks.find(
-          (t) => t.source === "screen_share_audio"
-        )?.track;
-
-        if (screenShareTrack) {
-          console.log("Adding screen share audio to mix");
-          const sysStream = new MediaStream([screenShareTrack]);
-          const sysSource = audioContext.createMediaStreamSource(sysStream);
-          sysSource.connect(dest);
-        }
-      }
-
       const mixedStream = dest.stream;
-      streamRef.current = mixedStream;
+      
+      // AI Audio Enhancement
+      const enhancer = new AudioEnhancer();
+      const enhancedStream = enhancer.processStream(mixedStream);
+      streamRef.current = mixedStream; // Keep original for cleanup, but use enhanced for recording
 
-      // 3. Connect to Proxy
-      const protocol = process.env.NEXT_PUBLIC_SERVER_URL?.startsWith("https") ? "wss" : "ws";
-      const host = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/^https?:\/\//, "");
-      const wsUrl = `${protocol}://${host}/transcribe/ws?api_key=${apiKey}`;
+      // Direct Deepgram connection
+      const deepgramKey = process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY || "";
+      const wsUrl = `wss://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&language=en&interim_results=true`;
 
-      console.log("Connecting to Transcription Proxy:", wsUrl);
-
-      const socket = new WebSocket(wsUrl);
+      const socket = new WebSocket(wsUrl, ["token", deepgramKey]);
       socketRef.current = socket;
 
       socket.onopen = () => {
         setIsConnecting(false);
         setIsEnabled(true);
 
-        const mediaRecorder = new MediaRecorder(mixedStream, {
+        const mediaRecorder = new MediaRecorder(enhancedStream, {
           mimeType: "audio/webm;codecs=opus",
         });
         mediaRecorderRef.current = mediaRecorder;
@@ -216,17 +194,14 @@ export function useTranscription({ meetingId, userName, call, onTranscript }: Us
         stopTranscription();
       };
 
-      socket.onclose = () => {
-        console.log("Transcription WebSocket closed");
-        stopTranscription();
-      };
+      socket.onclose = () => stopTranscription();
 
     } catch (error) {
       console.error("Failed to start transcription:", error);
       setIsConnecting(false);
       stopTranscription();
     }
-  }, [isEnabled, isConnecting, apiKey, onTranscript, saveTranscript, stopTranscription, call]);
+  }, [isEnabled, isConnecting, onTranscript, saveTranscript, stopTranscription, call]);
 
   const toggleTranscription = useCallback(() => {
     if (isEnabled) {
