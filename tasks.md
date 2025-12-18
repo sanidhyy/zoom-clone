@@ -58,6 +58,12 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Implement fix for WebSocket auth
   - [x] Final Verification
 
+- [/] T-0031: Fix IDE Errors & Accessibility Lints
+  - [/] Fix TypeScript path resolution (@/ imports)
+  - [ ] Resolve README.md and globals.css warnings
+  - [ ] Finalize accessibility in meeting-room.tsx
+  - [ ] Verification
+
 - [x] T-0029: Debug Stream API Rate Limit Error
   - [x] Identify redundant sendCustomEvent calls
   - [x] Implement state-change validation logic
@@ -70,6 +76,25 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Final Verification
 
 ------------------------------------------------------------
+
+------------------------------------------------------------
+
+Task ID: T-0031
+Title: Fix IDE Errors & Accessibility Lints
+Status: IN-PROGRESS
+Owner: Miles
+
+Start log:
+
+- Timestamp: 2025-12-19 04:15
+- Plan: Address a comprehensive list of IDE-reported errors including TypeScript path resolution, module existence, and accessibility.
+
+End log:
+
+- Timestamp: YYYY-MM-DD HH:MM
+- Changed:
+- Tests:
+- Status: IN-PROGRESS
 
 ------------------------------------------------------------
 
