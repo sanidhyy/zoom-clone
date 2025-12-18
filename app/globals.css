@@ -252,6 +252,15 @@ h1, h2, h3, h4, h5, h6 {
   .flex-between {
     @apply flex items-center justify-between;
   }
+
+  @keyframes caret-blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  
+  .animate-caret-blink {
+    animation: caret-blink 0.8s infinite;
+  }
 }
 
 /* ======== Animations ======== */

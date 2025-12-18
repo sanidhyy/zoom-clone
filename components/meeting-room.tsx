@@ -70,9 +70,17 @@ export const MeetingRoom = () => {
     mode: geminiMode,
     orbState,
     isConnecting: geminiConnecting,
+    transcripts: geminiTranscripts,
+    currentText: geminiCurrentText,
     toggleA,
     toggleB,
   } = useGeminiLive({ call, meetingId });
+
+  // Determine which transcripts to show
+  const activeTranscripts = geminiMode !== "IDLE" ? geminiTranscripts : transcripts;
+  const activeCurrentText = geminiMode !== "IDLE" ? geminiCurrentText : currentText;
+  const activeCaptionsEnabled = geminiMode !== "IDLE" ? true : captionsEnabled;
+  const activeCaptionsConnecting = geminiMode !== "IDLE" ? geminiConnecting : captionsConnecting;
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
@@ -112,10 +120,10 @@ export const MeetingRoom = () => {
 
       {/* Live Captions Overlay */}
       <LiveCaptions
-        isEnabled={captionsEnabled}
-        isConnecting={captionsConnecting}
-        transcripts={transcripts}
-        currentText={currentText}
+        isEnabled={activeCaptionsEnabled}
+        isConnecting={activeCaptionsConnecting}
+        transcripts={activeTranscripts}
+        currentText={activeCurrentText}
         onToggle={toggleTranscription}
       />
 

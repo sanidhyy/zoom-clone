@@ -4,6 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Call, useCallStateHooks } from "@stream-io/video-react-sdk";
 import { OrbState } from "@/components/translator-orbs";
 
+interface Transcript {
+  id: string;
+  text: string;
+  isFinal: boolean;
+  timestamp: Date;
+}
+
 interface UseGeminiLiveOptions {
   call: Call | undefined;
   meetingId: string;
@@ -19,6 +26,8 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
   const [mode, setMode] = useState<"IDLE" | "A_SPEAK" | "B_SPEAK">("IDLE");
   const [orbState, setOrbState] = useState<OrbState>("IDLE");
   const [isConnecting, setIsConnecting] = useState(false);
+  const [transcripts, setTranscripts] = useState<Transcript[]>([]);
+  const [currentText, setCurrentText] = useState("");
   
   const socketRef = useRef<WebSocket | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -68,6 +77,8 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
     setOrbState("IDLE");
     setMode("IDLE");
     setIsConnecting(false);
+    setTranscripts([]);
+    setCurrentText("");
     broadcastState("IDLE", "IDLE");
   }, [call, broadcastState]);
 
@@ -156,13 +167,14 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
         setIsConnecting(false);
       };
 
-      socket.onmessage = async (event) => {
+        socket.onmessage = async (event) => {
         console.log("Socket message received:", typeof event.data);
         if (typeof event.data === "string") {
           try {
             const msg = JSON.parse(event.data);
             if (msg.text) {
               console.log("Gemini Text:", msg.text);
+              setCurrentText(prev => prev + msg.text);
               currentTranscriptRef.current += msg.text;
             }
           } catch (e) {
@@ -171,6 +183,12 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
           return;
         }
 
+        // --- READ-ALOUD MODE START ---
+        // 1. Separation: Stop current recording to avoid feedback
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+          mediaRecorderRef.current.pause();
+        }
+        
         updateOrbAndBroadcast("TRANSLATING");
         
         // Handle binary audio data from Gemini
@@ -181,6 +199,8 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
           const source = audioContext.createBufferSource();
           source.buffer = audioBuffer;
 
+          // In A_SPEAK, we want the remote Peer to hear our translation.
+          // In B_SPEAK, we want the Local Peer (us) to hear their translation.
           if (targetMode === "A_SPEAK") {
             const broadcastDest = audioContext.createMediaStreamDestination();
             source.connect(broadcastDest);
@@ -192,22 +212,36 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
               await call.publishTrack(track);
             }
           } else {
+            // Local playback for us to understand them
             source.connect(audioContext.destination);
           }
           
           source.start();
           source.onended = () => {
+             // --- LISTENING MODE RESUME ---
              updateOrbAndBroadcast("LISTENING");
+             if (mediaRecorderRef.current && mediaRecorderRef.current.state === "paused") {
+               mediaRecorderRef.current.resume();
+             }
              
-             // Save to Supabase after a segment is translated
+             // Save to Supabase after the translation segment
              if (currentTranscriptRef.current) {
+                const finalTranscript: Transcript = {
+                  id: `${Date.now()}-${Math.random()}`,
+                  text: currentTranscriptRef.current,
+                  isFinal: true,
+                  timestamp: new Date(),
+                };
+                setTranscripts(prev => [...prev.slice(-10), finalTranscript]);
+                setCurrentText("");
+
                 fetch("/api/transcribe/save", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     session_id: meetingId,
                     user_name: localParticipant?.name || "Unknown",
-                    original_text: "Audio Speech", // We'd need STT for the actual original text if not provided by Gemini
+                    original_text: "Audio Speech",
                     translated_text: currentTranscriptRef.current,
                     language_pair: targetMode === "A_SPEAK" ? "en-tl" : "tl-en",
                   }),
@@ -264,6 +298,8 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
     mode,
     orbState,
     isConnecting,
+    transcripts,
+    currentText,
     startTranslation,
     stopTranslation,
     toggleA: () => mode === "A_SPEAK" ? stopTranslation() : startTranslation("A_SPEAK"),

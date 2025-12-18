@@ -26,43 +26,52 @@ export const LiveCaptions = ({
     return null;
   }
 
-  // Get last 3 transcripts for display
-  const recentTranscripts = transcripts.slice(-3);
+  // Get last 4 transcripts for a richer feed
+  const recentTranscripts = transcripts.slice(-4);
   const hasContent = recentTranscripts.length > 0 || currentText;
 
   return (
-    <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-3xl px-4">
+    <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-4xl px-6 pointer-events-none">
       <div
         className={cn(
-          "bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden transition-all duration-300",
-          hasContent ? "opacity-100" : "opacity-60"
+          "bg-black/40 backdrop-blur-2xl rounded-3xl border border-white/5 overflow-hidden transition-all duration-500 transform",
+          hasContent ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95"
         )}
       >
         {/* Caption Content */}
-        <div className="p-4 min-h-[60px] max-h-[120px] overflow-y-auto">
+        <div className="p-6 min-h-[80px] max-h-[160px] overflow-y-auto scrollbar-hide flex flex-col justify-end">
           {isConnecting ? (
-            <div className="flex items-center gap-2 text-white/60">
-              <span className="material-symbols-rounded animate-spin text-lg">
-                progress_activity
-              </span>
-              <span className="text-sm">Connecting to live captions...</span>
+            <div className="flex items-center justify-center gap-3 text-white/40">
+              <div className="flex gap-1">
+                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" />
+              </div>
+              <span className="text-sm font-medium tracking-wide uppercase">Establishing Secure Feed...</span>
             </div>
           ) : hasContent ? (
-            <div className="space-y-1">
-              {recentTranscripts.map((t) => (
-                <p key={t.id} className="text-white/80 text-base leading-relaxed">
+            <div className="space-y-3">
+              {recentTranscripts.map((t, i) => (
+                <p 
+                  key={t.id} 
+                  className={cn(
+                    "text-white text-lg font-medium leading-tight animate-in fade-in slide-in-from-bottom-2 duration-500",
+                    i < recentTranscripts.length - 1 ? "opacity-30 text-base" : "opacity-90"
+                  )}
+                >
                   {t.text}
                 </p>
               ))}
               {currentText && (
-                <p className="text-white/50 text-base leading-relaxed italic">
+                <p className="text-blue-400 text-lg font-semibold leading-tight animate-pulse">
                   {currentText}
+                  <span className="inline-block w-1.5 h-5 ml-1 bg-blue-500/50 rounded-full animate-caret-blink align-middle" />
                 </p>
               )}
             </div>
           ) : (
-            <p className="text-white/40 text-sm text-center">
-              Listening for speech...
+            <p className="text-white/20 text-sm font-medium text-center uppercase tracking-widest">
+              Awaiting Signal...
             </p>
           )}
         </div>
