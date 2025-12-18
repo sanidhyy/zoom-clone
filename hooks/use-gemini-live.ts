@@ -9,6 +9,12 @@ interface UseGeminiLiveOptions {
   meetingId: string;
 }
 
+interface TranslatorStateEvent {
+  mode: "IDLE" | "A_SPEAK" | "B_SPEAK";
+  orbState: OrbState;
+  userId: string;
+}
+
 export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
   const [mode, setMode] = useState<"IDLE" | "A_SPEAK" | "B_SPEAK">("IDLE");
   const [orbState, setOrbState] = useState<OrbState>("IDLE");
@@ -17,11 +23,28 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
   const socketRef = useRef<WebSocket | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
-  const remoteAudioStreamRef = useRef<MediaStream | null>(null);
   const playbackTrackRef = useRef<MediaStreamTrack | null>(null);
+  const currentTranscriptRef = useRef<string>("");
 
-  const { useMicrophoneState } = useCallStateHooks();
+  const { useMicrophoneState, useLocalParticipant } = useCallStateHooks();
   const { microphone } = useMicrophoneState();
+  const localParticipant = useLocalParticipant();
+
+  const broadcastState = useCallback((newMode: typeof mode, newOrb: OrbState) => {
+    if (call) {
+      call.sendCustomEvent({
+        type: "translator:state_change",
+        mode: newMode,
+        orbState: newOrb,
+        userId: localParticipant?.userId,
+      });
+    }
+  }, [call, localParticipant]);
+
+  const updateOrbAndBroadcast = useCallback((newOrb: OrbState) => {
+    setOrbState(newOrb);
+    broadcastState(mode, newOrb);
+  }, [mode, broadcastState]);
 
   const stopTranslation = useCallback(async () => {
     if (mediaRecorderRef.current) {
@@ -45,7 +68,8 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
     setOrbState("IDLE");
     setMode("IDLE");
     setIsConnecting(false);
-  }, [call]);
+    broadcastState("IDLE", "IDLE");
+  }, [call, broadcastState]);
 
   const startTranslation = useCallback(async (targetMode: "A_SPEAK" | "B_SPEAK") => {
     if (!call || isConnecting) return;
@@ -70,7 +94,7 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
         setOrbState("LISTENING");
       } else {
         // B_SPEAK: Capture from remote participant
-        const remoteParticipant = call.state.participants.find(p => !p.isLocal);
+        const remoteParticipant = call.state.participants.find((p: any) => !p.isLocal);
         if (remoteParticipant) {
            // @ts-ignore
           const audioTrack = remoteParticipant.publishedTracks.find((t) => t.audioTrack)?.audioTrack || remoteParticipant.publishedTracks.find((t) => t.track?.kind === "audio")?.track;
@@ -124,7 +148,7 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
             const msg = JSON.parse(event.data);
             if (msg.text) {
               console.log("Gemini Text:", msg.text);
-              // We could show this in the UI if needed
+              currentTranscriptRef.current += msg.text;
             }
           } catch (e) {
             console.error("Error parsing socket JSON:", e);
@@ -132,7 +156,7 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
           return;
         }
 
-        setOrbState("TRANSLATING");
+        updateOrbAndBroadcast("TRANSLATING");
         
         // Handle binary audio data from Gemini
         if (event.data instanceof Blob) {
@@ -143,24 +167,38 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
           source.buffer = audioBuffer;
 
           if (targetMode === "A_SPEAK") {
-            // A Speak: Play back to B (broadcast)
             const broadcastDest = audioContext.createMediaStreamDestination();
             source.connect(broadcastDest);
             
             const track = broadcastDest.stream.getAudioTracks()[0];
             if (!playbackTrackRef.current) {
               playbackTrackRef.current = track;
-              // @ts-ignore: publishing custom track to broadcast to others
+              // @ts-ignore
               await call.publishTrack(track);
             }
           } else {
-            // B Speak: Play locally for A
             source.connect(audioContext.destination);
           }
           
           source.start();
           source.onended = () => {
-             setOrbState("LISTENING");
+             updateOrbAndBroadcast("LISTENING");
+             
+             // Save to Supabase after a segment is translated
+             if (currentTranscriptRef.current) {
+                fetch("/api/transcribe/save", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    session_id: meetingId,
+                    user_name: localParticipant?.name || "Unknown",
+                    original_text: "Audio Speech", // We'd need STT for the actual original text if not provided by Gemini
+                    translated_text: currentTranscriptRef.current,
+                    language_pair: targetMode === "A_SPEAK" ? "en-tl" : "tl-en",
+                  }),
+                }).catch(err => console.error("Failed to save transcript:", err));
+                currentTranscriptRef.current = "";
+             }
           };
         }
       };
@@ -173,6 +211,39 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
       stopTranslation();
     }
   }, [call, isConnecting, stopTranslation]);
+
+  useEffect(() => {
+    if (!call) return;
+
+    const unsubscribe = call.on("custom", (event: any) => {
+      if (event.type === "translator:state_change") {
+        const data = event.payload as any;
+        if (data.userId !== localParticipant?.userId) {
+          // If another participant is TRANSLATING, we should show it
+          // and mute our mic
+          if (data.orbState === "TRANSLATING") {
+            setOrbState("TRANSLATING");
+            call.microphone.disable();
+          } else if (data.orbState === "LISTENING") {
+            setOrbState("LISTENING");
+          } else {
+            setOrbState("IDLE");
+            // Only re-enable if we weren't manually muted
+            // Actually, keep it simple for now as requested: "B mic OFF while B is hearing"
+            call.microphone.enable();
+          }
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [call, localParticipant]);
+
+  useEffect(() => {
+    return () => {
+      stopTranslation();
+    };
+  }, [stopTranslation]);
 
   return {
     mode,

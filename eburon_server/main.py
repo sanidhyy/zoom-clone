@@ -651,6 +651,9 @@ async def live_audio_endpoint(websocket: WebSocket):
             trigger_tokens=25600,
             sliding_window=types.SlidingWindow(target_tokens=12800),
         ),
+        system_instruction=types.Content(
+            parts=[types.Part.from_text(text="You are a real-time translator. Translate everything you hear between English and Tagalog (or instructions). Your output should be ONLY the translation in audio form. Be fast and accurate.")]
+        ),
     )
     
     model = "models/gemini-2.5-flash-native-audio-preview-09-2025"
