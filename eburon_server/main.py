@@ -643,7 +643,7 @@ async def live_audio_endpoint(websocket: WebSocket):
         media_resolution="MEDIA_RESOLUTION_MEDIUM",
         speech_config=types.SpeechConfig(
             voice_config=types.VoiceConfig(
-                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name="Charon")
+                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name="Orus")
             )
         ),
         realtime_input_config=types.RealtimeInputConfig(turn_coverage="TURN_INCLUDES_ALL_INPUT"),
@@ -656,7 +656,7 @@ async def live_audio_endpoint(websocket: WebSocket):
         ),
     )
     
-    model = "models/gemini-2.0-flash-exp"
+    model = "models/gemini-2.5-flash-native-audio-preview-12-2025"
     
     try:
         async with client.aio.live.connect(model=model, config=config) as session:

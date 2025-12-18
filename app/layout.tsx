@@ -1,5 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 
@@ -12,9 +12,10 @@ import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-const inter = Inter({ 
+const roboto = Roboto({ 
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
 });
 
 export const viewport: Viewport = {
@@ -48,7 +49,7 @@ const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
           },
         }}
       >
-        <body className={cn("min-h-screen font-sans antialiased text-white selection:bg-blue-500/30", inter.variable)}>
+        <body className={cn("min-h-screen font-sans antialiased text-white selection:bg-blue-500/30", roboto.variable)}>
           <div className="premium-bg fixed inset-0 -z-10 bg-[#050505]" />
           <div className="mesh-gradient fixed inset-0 -z-10 opacity-40 blur-[100px]" />
           {children}

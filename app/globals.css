@@ -15,15 +15,20 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+:root {
+  --font-roboto: 'Roboto', sans-serif;
+  --font-helvetica: 'Helvetica', 'Arial', sans-serif;
+}
+
 body {
-  background: #000000;
-  color: #f5f5f7;
-  font-family: var(--font-open-sans), Helvetica, Arial, sans-serif;
+  background-color: #050505;
+  color: #ffffff;
+  font-family: var(--font-helvetica), var(--font-roboto);
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-roboto), Helvetica, Arial, sans-serif;
+  font-family: var(--font-roboto), var(--font-helvetica);
 }
 
 /* ======== Material Icons ======== */
