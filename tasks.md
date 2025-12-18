@@ -91,10 +91,10 @@ Start log:
 
 End log:
 
-- Timestamp: YYYY-MM-DD HH:MM
-- Changed:
-- Tests:
-- Status: IN-PROGRESS
+- Timestamp: 2025-12-19 04:25
+- Changed: Updated tsconfig.json with baseUrl, fixed constants extensions, and resolved README.md lints.
+- Tests: Verified path resolution in layout.tsx.
+- Status: DONE
 
 ------------------------------------------------------------
 
