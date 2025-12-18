@@ -169,6 +169,7 @@ export const MeetingRoom = () => {
             onClick={toggleA}
             disabled={geminiConnecting || (geminiMode !== "IDLE" && geminiMode !== "A_SPEAK")}
             title="A Speak: Translate your voice to others"
+            aria-label="A Speak: Translate your voice to others"
             className={cn(
               "cursor-pointer rounded-full w-10 h-10 flex items-center justify-center transition-all duration-500",
               geminiMode === "A_SPEAK" 
@@ -270,6 +271,7 @@ export const MeetingRoom = () => {
             <DropdownMenuTrigger
               className="cursor-pointer rounded-full w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 transition-colors"
               title="Call layout"
+              aria-label="Call layout"
             >
               <LayoutList size={20} className="text-white" />
             </DropdownMenuTrigger>
