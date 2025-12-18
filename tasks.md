@@ -79,10 +79,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-19 03:45
 - Plan: Identify the source of @google/genai dependency and fix it.
 
 End log:
+
 - Timestamp: 2025-12-19 03:52
 - Changed: Corrected dependency name to `@google/generative-ai` in `0rbz` repository's `package.json` and `index.html`. Updated code in `MeetingRoom.tsx` to handle API changes.
 - Tests: Verified package name on NPM and resolved build blocking issues.
@@ -96,10 +98,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18 22:28
 - Plan: Locate excessive `sendCustomEvent` calls and implement throttling.
 
 End log:
+
 - Timestamp: 2025-12-18 22:31
 - Changed: Added `lastBroadcastRef` and state-change check in `hooks/use-gemini-live.ts` to prevent spamming Stream API with redundant custom events.
 - Tests: Verified logic for state-change detection.
@@ -113,10 +117,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18 22:26
 - Plan: Identify cause of WebSocket SyntaxError and implement safeguard for empty API keys.
 
 End log:
+
 - Timestamp: 2025-12-18 22:30
 - Changed: Updated `hooks/use-transcription.ts` to verify `NEXT_PUBLIC_DEEPGRAM_API_KEY` before WebSocket instantiation. Added the missing key to `.env`.
 - Tests: Verified code structure and environment variable sync.
@@ -132,10 +138,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18 21:22
 - Plan: Create develop branch, commit schema, and execute migration.
 
 End log:
+
 - Timestamp: 2025-12-18 21:28
 - Changed: Created `develop` branch. Committed 30+ files including `supabase/schema.sql` and `supabase/migrations/`.
 - Tests: Verified SQL structure and branch integrity. Ready for DB push.
@@ -149,10 +157,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18 21:10
 - Plan: Overhaul UI icons, add restricted settings page, and implement AI tool config.
 
 End log:
+
 - Timestamp: 2025-12-18 21:25
 - Changed: Updated MeetingRoom.tsx with Headset, Mic, Sparkles icons. Added /settings/server page. Updated .env.example.
 - Tests: Verified A/B Speak icon distinction and Admin-only page access.
@@ -166,10 +176,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18 20:55
 - Plan: Update .env.example, rewrite README.md, and fix documentation lints.
 
 End log:
+
 - Timestamp: 2025-12-18 21:05
 - Changed: Updated .env and .env.example. Rewrote README.md with comprehensive walkthrough and premium features.
 - Tests: Verified documentation formatting and branding compliance.
@@ -183,10 +195,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18
 - Plan: Implement auto-mute and skip functionality.
 
 End log:
+
 - Timestamp: 2025-12-18
 - Changed: Added autoMute and skipTurn to useGeminiLive.
 - Tests: Verified in MeetingRoom.
@@ -199,10 +213,12 @@ Status: DONE
 Owner: Miles
 
 Start log:
+
 - Timestamp: 2025-12-18
 - Plan: Create api/meetings/summary and MeetingSummaryModal.
 
 End log:
+
 - Timestamp: 2025-12-18
 - Changed: Implemented summary generation via Gemini.
 - Tests: Verified Markdown output.
