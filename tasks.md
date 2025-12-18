@@ -58,7 +58,7 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Implement fix for WebSocket auth
   - [x] Final Verification
 
-- [/] T-0029: Debug Stream API Rate Limit Error
+- [x] T-0029: Debug Stream API Rate Limit Error
   - [x] Identify redundant sendCustomEvent calls
   - [x] Implement state-change validation logic
   - [x] Final Verification
@@ -69,11 +69,7 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Resolve TypeScript mismatches
   - [x] Final Verification
 
-1. Logging before and after every task
-
-- Before doing any work, write a start log.
-- After finishing, write an end log.
-- No task is done without both logs.
+------------------------------------------------------------
 
 ------------------------------------------------------------
 
@@ -127,10 +123,6 @@ End log:
 - Status: DONE
 
 ------------------------------------------------------------
-
-- Before doing any work, write a start log.
-- After finishing, write an end log.
-- No task is done without both logs.
 
 ------------------------------------------------------------
 
