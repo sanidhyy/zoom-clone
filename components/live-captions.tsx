@@ -1,5 +1,4 @@
-"use client";
-
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface LiveCaptionsProps {
@@ -14,6 +13,59 @@ interface LiveCaptionsProps {
   currentText: string;
   onToggle: () => void;
 }
+
+const TypedText = ({ text, className }: { text: string; className?: string }) => {
+  const [displayedText, setDisplayedText] = useState("");
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!text) {
+      setDisplayedText("");
+      return;
+    }
+
+    // If text changed, we want to start from where we are and catch up
+    // However, for interim transcripts, they often change RAPIDLY as STT refines it.
+    // To keep it feeling "human", we only append if the new text starts with the old text,
+    // or we jump forward if it's a completely new sentence/segment.
+    
+    // Simplest robust way for live STT: 
+    // If the target text is longer than displayed, type forward.
+    // If it's shorter (STT refinement correction), adjust immediately to avoid "deletion" animations which look jarring.
+    
+    if (text.length < displayedText.length || !text.startsWith(displayedText)) {
+      setDisplayedText(text);
+      return;
+    }
+
+    if (displayedText.length < text.length) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      
+      const typeNext = () => {
+        setDisplayedText(prev => {
+          if (prev.length < text.length) {
+            // Take the next character
+            return text.slice(0, prev.length + 1);
+          }
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          return prev;
+        });
+      };
+
+      // Natural speed: roughly 50ms per char, but faster if gap is large
+      const gap = text.length - displayedText.length;
+      const speed = gap > 20 ? 10 : gap > 10 ? 30 : 50;
+
+      intervalRef.current = setInterval(typeNext, speed);
+    }
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [text, displayedText]);
+
+  return <span className={className}>{displayedText}</span>;
+};
 
 export const LiveCaptions = ({
   isEnabled,
@@ -64,7 +116,7 @@ export const LiveCaptions = ({
               ))}
               {currentText && (
                 <p className="text-blue-400 text-lg font-semibold leading-tight animate-pulse">
-                  {currentText}
+                  <TypedText text={currentText} />
                   <span className="inline-block w-1.5 h-5 ml-1 bg-blue-500/50 rounded-full animate-caret-blink align-middle" />
                 </p>
               )}
