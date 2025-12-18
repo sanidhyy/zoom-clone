@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 
 import { Loader } from "@/components/loader";
 import { MeetingRoom } from "@/components/meeting-room";
@@ -19,6 +19,19 @@ const MeetingIdPage = ({ params }: MeetingIdPageProps) => {
   const { id } = use(params);
   const [isSetupComplete, setIsSetupComplete] = useState(false);
   const { user, isLoaded } = useUser();
+
+  useEffect(() => {
+    const savedSetup = localStorage.getItem(`setup_complete_${id}`);
+    if (savedSetup === "true") {
+      setIsSetupComplete(true);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (isSetupComplete) {
+      localStorage.setItem(`setup_complete_${id}`, "true");
+    }
+  }, [isSetupComplete, id]);
 
   const { call, isCallLoading } = useGetCallById(id);
 

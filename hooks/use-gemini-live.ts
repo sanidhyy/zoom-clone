@@ -79,31 +79,44 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
     setMode(targetMode);
 
     try {
+      console.log(`Starting translation session for mode: ${targetMode}`);
       // 1. Setup Audio Context
       if (!audioContextRef.current) {
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
       const audioContext = audioContextRef.current;
+      if (audioContext.state === "suspended") {
+        console.log("Resuming audio context...");
+        await audioContext.resume();
+      }
       const dest = audioContext.createMediaStreamDestination();
 
       // 2. Capture Source Audio
       if (targetMode === "A_SPEAK") {
+        console.log("Capturing local audio for A_SPEAK");
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const source = audioContext.createMediaStreamSource(stream);
         source.connect(dest);
         setOrbState("LISTENING");
       } else {
         // B_SPEAK: Capture from remote participant
+        console.log("Searching for remote participant for B_SPEAK");
         const remoteParticipant = call.state.participants.find((p: any) => !p.isLocal);
         if (remoteParticipant) {
+           console.log(`Remote participant found: ${remoteParticipant.userId}`);
            // @ts-ignore
           const audioTrack = remoteParticipant.publishedTracks.find((t) => t.audioTrack)?.audioTrack || remoteParticipant.publishedTracks.find((t) => t.track?.kind === "audio")?.track;
           if (audioTrack) {
+            console.log("Remote audio track captured, connecting to destination");
             const stream = new MediaStream([audioTrack]);
             const source = audioContext.createMediaStreamSource(stream);
             source.connect(dest);
             setOrbState("LISTENING");
+          } else {
+            console.warn("No audio track found for remote participant");
           }
+        } else {
+          console.warn("No remote participant found to translate");
         }
       }
 
@@ -113,9 +126,11 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
       const wsUrl = `${protocol}://${host}/api/live-audio`;
       
       const socket = new WebSocket(wsUrl);
+      socket.binaryType = "blob"; // Explicitly set binary type
       socketRef.current = socket;
 
       socket.onopen = () => {
+        console.log("Gemini WebSocket Connected");
         const mediaRecorder = new MediaRecorder(dest.stream, { mimeType: "audio/webm;codecs=opus" });
         mediaRecorderRef.current = mediaRecorder;
 
@@ -142,7 +157,7 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
       };
 
       socket.onmessage = async (event) => {
-        // Handle JSON messages (text responses)
+        console.log("Socket message received:", typeof event.data);
         if (typeof event.data === "string") {
           try {
             const msg = JSON.parse(event.data);

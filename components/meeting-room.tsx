@@ -13,7 +13,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { LayoutList, Users } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   DropdownMenu,
@@ -42,12 +42,19 @@ export const MeetingRoom = () => {
   const [showParticipants, setShowParticipants] = useState(false);
   const [layout, setLayout] = useState<CallLayoutType>("speaker-left");
 
+  const meetingId = call?.id || "";
+  const userName = user?.firstName || user?.username || "Unknown";
+
+  useEffect(() => {
+    if (meetingId) {
+      localStorage.setItem("active_meeting_id", meetingId);
+    }
+  }, [meetingId]);
+
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
   const isPersonalRoom = !!searchParams.get("personal");
-  const meetingId = call?.id || "";
-  const userName = user?.firstName || user?.username || "Unknown";
 
   // Live transcription with API key and meeting ID
   const {
@@ -81,14 +88,14 @@ export const MeetingRoom = () => {
   };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden pt-4 text-white">
-      <div className="relative flex size-full items-center justify-center">
-        <div className="flex size-full max-w-[1000px] items-center">
+    <div className="relative h-screen w-full overflow-hidden text-white">
+      <div className="relative flex size-full bg-dark-1 overflow-hidden">
+        <div className="flex size-full items-center">
           <CallLayout />
         </div>
 
         <div
-          className={cn("ml-2 hidden h-[calc(100vh_-_86px)]", {
+          className={cn("hidden h-[calc(100vh_-_86px)]", {
             "show-block": showParticipants,
           })}
         >
@@ -123,14 +130,16 @@ export const MeetingRoom = () => {
         />
 
         {/* Translator Controls */}
-        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-full border border-white/10">
+        <div className="flex items-center gap-2 glassmorphism p-1 rounded-full">
           <button
             onClick={toggleA}
             disabled={geminiConnecting || (geminiMode !== "IDLE" && geminiMode !== "A_SPEAK")}
             title="A Speak (Translate your voice to B)"
             className={cn(
-              "cursor-pointer rounded-full w-10 h-10 flex items-center justify-center transition-all",
-              geminiMode === "A_SPEAK" ? "bg-blue-600 text-white" : "hover:bg-white/10 text-white/70"
+              "cursor-pointer rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300",
+              geminiMode === "A_SPEAK" 
+                ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/20 scale-105" 
+                : "hover:bg-white/5 text-white/50 hover:text-white"
             )}
           >
             <Mic size={18} />
@@ -142,8 +151,10 @@ export const MeetingRoom = () => {
             disabled={geminiConnecting || (geminiMode !== "IDLE" && geminiMode !== "B_SPEAK")}
             title="B Speak (Translate B's voice to you)"
             className={cn(
-              "cursor-pointer rounded-full w-10 h-10 flex items-center justify-center transition-all",
-              geminiMode === "B_SPEAK" ? "bg-purple-600 text-white" : "hover:bg-white/10 text-white/70"
+              "cursor-pointer rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300",
+              geminiMode === "B_SPEAK" 
+                ? "bg-gradient-to-br from-purple-500 to-fuchsia-600 text-white shadow-lg shadow-purple-500/20 scale-105" 
+                : "hover:bg-white/5 text-white/50 hover:text-white"
             )}
           >
             <Mic size={18} />

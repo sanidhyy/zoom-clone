@@ -1,11 +1,21 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { MeetingTypeList } from "@/components/meeting-type-list";
 import { useGetCalls } from "@/hooks/use-get-calls";
 
 const HomePage = () => {
+  const router = useRouter();
   const now = new Date();
   const { upcomingCalls } = useGetCalls();
+
+  useEffect(() => {
+    const activeMeetingId = localStorage.getItem("active_meeting_id");
+    if (activeMeetingId) {
+      router.push(`/meeting/${activeMeetingId}`);
+    }
+  }, [router]);
 
   const time = now.toLocaleTimeString("en-US", {
     hour: "2-digit",

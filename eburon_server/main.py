@@ -656,7 +656,7 @@ async def live_audio_endpoint(websocket: WebSocket):
         ),
     )
     
-    model = "models/gemini-2.5-flash-native-audio-preview-09-2025"
+    model = "models/gemini-2.0-flash-exp"
     
     try:
         async with client.aio.live.connect(model=model, config=config) as session:

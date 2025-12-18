@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { Inter } from "next/font/google";
 import type { Metadata, Viewport } from "next";
-import { Roboto, Open_Sans } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
@@ -12,15 +12,9 @@ import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-const roboto = Roboto({ 
+const inter = Inter({ 
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-roboto"
-});
-
-const openSans = Open_Sans({ 
-  subsets: ["latin"],
-  variable: "--font-open-sans"
+  variable: "--font-inter",
 });
 
 export const viewport: Viewport = {
@@ -48,13 +42,15 @@ const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
           variables: {
             colorText: "#FFF",
             colorPrimary: "#0E78F9",
-            colorBackground: "#1C1F2E",
-            colorInputBackground: "#252A41",
+            colorBackground: "#050505",
+            colorInputBackground: "#111",
             colorInputText: "#FFF",
           },
         }}
       >
-        <body className={cn("min-h-screen bg-dark-2 font-sans antialiased", openSans.variable, roboto.variable)}>
+        <body className={cn("min-h-screen font-sans antialiased text-white selection:bg-blue-500/30", inter.variable)}>
+          <div className="premium-bg fixed inset-0 -z-10 bg-[#050505]" />
+          <div className="mesh-gradient fixed inset-0 -z-10 opacity-40 blur-[100px]" />
           {children}
           <Toaster />
         </body>
