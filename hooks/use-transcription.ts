@@ -138,9 +138,15 @@ export function useTranscription({ meetingId, userName, call, onTranscript }: Us
       streamRef.current = mixedStream; // Keep original for cleanup, but use enhanced for recording
 
       // Direct Deepgram connection
-      const deepgramKey = process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY || "";
-      const wsUrl = `wss://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&language=en&interim_results=true`;
+      const deepgramKey = process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY;
+      
+      if (!deepgramKey) {
+        console.error("Deepgram API Key is missing. Transcription cannot start.");
+        setIsConnecting(false);
+        return;
+      }
 
+      const wsUrl = `wss://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&language=en&interim_results=true`;
       const socket = new WebSocket(wsUrl, ["token", deepgramKey]);
       socketRef.current = socket;
 

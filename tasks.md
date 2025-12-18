@@ -53,8 +53,35 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Commit database schema
   - [x] Execute Supabase migration (Setup)
   - [x] Final Verification
+- [x] T-0028: Debug WebSocket Subprotocol Error
+  - [x] Identify root cause in use-transcription.ts
+  - [x] Implement fix for WebSocket auth
+  - [x] Final Verification
 
 1. Logging before and after every task
+
+- Before doing any work, write a start log.
+- After finishing, write an end log.
+- No task is done without both logs.
+
+------------------------------------------------------------
+
+Task ID: T-0028
+Title: Debug WebSocket Subprotocol Error
+Status: DONE
+Owner: Miles
+
+Start log:
+- Timestamp: 2025-12-18 22:26
+- Plan: Identify cause of WebSocket SyntaxError and implement safeguard for empty API keys.
+
+End log:
+- Timestamp: 2025-12-18 22:30
+- Changed: Updated `hooks/use-transcription.ts` to verify `NEXT_PUBLIC_DEEPGRAM_API_KEY` before WebSocket instantiation. Added the missing key to `.env`.
+- Tests: Verified code structure and environment variable sync.
+- Status: DONE
+
+------------------------------------------------------------
 
 - Before doing any work, write a start log.
 - After finishing, write an end log.
