@@ -58,11 +58,33 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Implement fix for WebSocket auth
   - [x] Final Verification
 
+- [/] T-0029: Debug Stream API Rate Limit Error
+  - [x] Identify redundant sendCustomEvent calls
+  - [x] Implement state-change validation logic
+  - [x] Final Verification
+
 1. Logging before and after every task
 
 - Before doing any work, write a start log.
 - After finishing, write an end log.
 - No task is done without both logs.
+
+------------------------------------------------------------
+
+Task ID: T-0029
+Title: Debug Stream API Rate Limit Error
+Status: DONE
+Owner: Miles
+
+Start log:
+- Timestamp: 2025-12-18 22:28
+- Plan: Locate excessive `sendCustomEvent` calls and implement throttling.
+
+End log:
+- Timestamp: 2025-12-18 22:31
+- Changed: Added `lastBroadcastRef` and state-change check in `hooks/use-gemini-live.ts` to prevent spamming Stream API with redundant custom events.
+- Tests: Verified logic for state-change detection.
+- Status: DONE
 
 ------------------------------------------------------------
 

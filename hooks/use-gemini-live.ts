@@ -40,14 +40,23 @@ export function useGeminiLive({ call, meetingId }: UseGeminiLiveOptions) {
   const { microphone } = useMicrophoneState();
   const localParticipant = useLocalParticipant();
 
+  const lastBroadcastRef = useRef<{ mode: string; orb: OrbState } | null>(null);
+
   const broadcastState = useCallback((newMode: typeof mode, newOrb: OrbState) => {
     if (call) {
+      // Prevent redundant broadcasts to avoid rate limits
+      if (lastBroadcastRef.current?.mode === newMode && lastBroadcastRef.current?.orb === newOrb) {
+        return;
+      }
+
       call.sendCustomEvent({
         type: "translator:state_change",
         mode: newMode,
         orbState: newOrb,
         userId: localParticipant?.userId,
       });
+
+      lastBroadcastRef.current = { mode: newMode, orb: newOrb };
     }
   }, [call, localParticipant]);
 
