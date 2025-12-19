@@ -26,6 +26,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = siteConfig;
 
 const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
+  const envKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const isPlaceholder = !envKey || envKey.includes("XXXXXX") || envKey === "your_clerk_publishable_key_here";
+  const publishableKey = isPlaceholder ? "pk_test_Y2xlcmsuZWJ1cm9uLmFpJA" : envKey;
+
   return (
     <html lang="en">
       <head>
@@ -35,6 +39,7 @@ const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
         />
       </head>
       <ClerkProvider
+        publishableKey={publishableKey}
         appearance={{
           layout: {
             logoImageUrl: "https://zoomie.eburon.ai/icons/logo.png",
