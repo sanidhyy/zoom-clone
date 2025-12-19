@@ -14,61 +14,65 @@ interface LiveCaptionsProps {
   onToggle: () => void;
 }
 
-const TypedText = ({ text, className }: { text: string; className?: string }) => {
+const TypedText = ({ text, className, onComplete }: { text: string; className?: string; onComplete?: () => void }) => {
   const [displayedText, setDisplayedText] = useState("");
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [queue, setQueue] = useState<string[]>([]);
+  const lastTextRef = useRef("");
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Update queue when source text changes
   useEffect(() => {
     if (!text) {
       setDisplayedText("");
+      setQueue([]);
+      lastTextRef.current = "";
       return;
     }
 
-    // Immediate sync for corrections or new segments
-    if (text.length < displayedText.length || !text.startsWith(displayedText)) {
-      setDisplayedText(text);
+    // If text was reset or changed significantly (e.g. new segment)
+    if (text.length < lastTextRef.current.length || !text.startsWith(lastTextRef.current)) {
+      setDisplayedText("");
+      setQueue(text.split(""));
+      lastTextRef.current = text;
       return;
     }
 
-    const typeNext = () => {
-      setDisplayedText(prev => {
-        if (prev.length < text.length) {
-          const nextChar = text[prev.length];
-          const nextPrev = text.slice(0, prev.length + 1);
-          
-          // Determine next delay
-          let delay = 40; // Base speed
-          
-          // Pause slightly longer at sentence/clause boundaries
-          if (/[.!?,]/.test(nextChar)) {
-            delay = 150;
-          } else if (nextChar === " ") {
-            delay = 30; // Quick space
-          }
-          
-          // Speed up if we're falling behind
-          const gap = text.length - nextPrev.length;
-          if (gap > 30) delay = 5;
-          else if (gap > 15) delay = 20;
+    // Append new characters to queue
+    if (text.length > lastTextRef.current.length) {
+      const newChars = text.slice(lastTextRef.current.length).split("");
+      setQueue(prev => [...prev, ...newChars]);
+      lastTextRef.current = text;
+    }
+  }, [text]);
 
-          if (timeoutRef.current) clearTimeout(timeoutRef.current);
-          timeoutRef.current = setTimeout(typeNext, delay);
-          
-          return nextPrev;
-        }
-        return prev;
-      });
-    };
-
-    if (displayedText.length < text.length && !timeoutRef.current) {
-      typeNext();
+  // Process queue
+  useEffect(() => {
+    if (queue.length === 0) {
+      if (onComplete) onComplete();
+      return;
     }
 
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    };
-  }, [text, displayedText]);
+    const nextChar = queue[0];
+    
+    // Calculate delay
+    let delay = 50; // Base speed: ~150 WPM
+
+    // Dynamic catch-up
+    if (queue.length > 30) delay = 5;
+    else if (queue.length > 15) delay = 15;
+    else if (queue.length > 5) delay = 25;
+
+    // Natural pauses
+    if (/[.!?,]/.test(nextChar)) delay += 150;
+    else if (nextChar === " ") delay += 30;
+
+    const timer = setTimeout(() => {
+      setDisplayedText(prev => prev + nextChar);
+      setQueue(prev => prev.slice(1));
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [queue, onComplete]);
 
   return <span className={className}>{displayedText}</span>;
 };
@@ -117,13 +121,13 @@ export const LiveCaptions = ({
                     i < recentTranscripts.length - 1 ? "opacity-30 text-base" : "opacity-90"
                   )}
                 >
-                  {t.text}
+                  <TypedText text={t.text} />
                 </p>
               ))}
               {currentText && (
-                <p className="text-blue-400 text-lg font-semibold leading-tight animate-pulse">
+                <p className="text-blue-400 text-lg font-semibold leading-tight animate-pulse flex items-center gap-1.5 flex-wrap">
                   <TypedText text={currentText} />
-                  <span className="inline-block w-1.5 h-5 ml-1 bg-blue-500/50 rounded-full animate-caret-blink align-middle" />
+                  <span className="inline-block w-1.5 h-5 bg-blue-500/50 rounded-full animate-caret-blink" />
                 </p>
               )}
             </div>

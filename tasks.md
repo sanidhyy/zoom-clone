@@ -57,6 +57,11 @@ GLOBAL CODING RULES (TOP 5)
   - [x] Identify root cause in use-transcription.ts
   - [x] Implement fix for WebSocket auth
   - [x] Final Verification
+- [x] T-0032: Stream Transcripts Per Character (Word Speed)
+  - [x] Implement TypedText with dynamic streaming
+  - [x] Apply streaming to LiveCaptions for interim and final text
+  - [x] Calibrate "per word" realtime speed delays
+  - [x] Final Verification
 
 - [x] T-0031: Fix IDE Errors & Accessibility Lints
   - [x] Fix TypeScript path resolution (@/ imports)
@@ -247,3 +252,24 @@ End log:
 - Timestamp: 2025-12-18
 - Changed: Implemented summary generation via Gemini.
 - Tests: Verified Markdown output.
+
+------------------------------------------------------------
+
+Task ID: T-0032
+Title: Stream Transcripts Per Character (Word Speed)
+Status: DONE
+Owner: Miles
+
+Start log:
+
+- Timestamp: 2025-12-19 22:52
+- Plan: Implement a smooth character-by-character streaming effect for live captions that emulates real-time word speed (approx. 150 WPM).
+
+End log:
+
+- Timestamp: 2025-12-19 23:05
+- Changed: Rewrote `TypedText` in `live-captions.tsx` to use a character queue with dynamic delays based on punctuation, word boundaries, and queue size (catch-up logic). Applied this to both interim and final transcripts.
+- Tests: Verified character-by-character output rhythm and "catch-up" behavior for long transcripts.
+- Status: DONE
+
+------------------------------------------------------------
