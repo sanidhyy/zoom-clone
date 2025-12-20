@@ -27,8 +27,12 @@ export const metadata: Metadata = siteConfig;
 
 const AppLayout = ({ children }: Readonly<PropsWithChildren>) => {
   const envKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  const isPlaceholder = !envKey || envKey.includes("XXXXXX") || envKey === "your_clerk_publishable_key_here";
-  const publishableKey = isPlaceholder ? "pk_test_Y2xlcmsuZWJ1cm9uLmFpJA" : envKey;
+  const isPlaceholderKey = (key: string | undefined) => 
+    !key || key.includes("XXXXX") || key.includes("your_") || key === "placeholder";
+  
+  const isPlaceholder = isPlaceholderKey(envKey);
+  // A valid-formatted (though fake) key to satisfy SDK initialization regex: clerk.eburon.ai$
+  const publishableKey = isPlaceholder ? "pk_test_Y2xlcmsuZWJ1cm9uLmFpJA==" : envKey!;
 
   return (
     <html lang="en">

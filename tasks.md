@@ -273,3 +273,22 @@ End log:
 - Status: DONE
 
 ------------------------------------------------------------
+
+Task ID: T-0033
+Title: Resolve Clerk Auth & Build Errors
+Status: DONE
+Owner: Miles
+
+Start log:
+
+- Timestamp: 2025-12-20 06:19
+- Plan: Implement format-compliant placeholder for Clerk publishable key and bypass auth logic in local/placeholder mode to fix build and dev crashes.
+
+End log:
+
+- Timestamp: 2025-12-20 07:28
+- Changed: Updated layout.tsx with placeholder key support, updated middleware to skip Auth in placeholder mode, and added defensive checks to docs page for build-time safety.
+- Tests: Verified successful build with `npm run build`. Prerender error on /docs resolved.
+- Status: DONE
+
+------------------------------------------------------------

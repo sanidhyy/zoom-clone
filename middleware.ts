@@ -11,7 +11,12 @@ const protectedRoutes = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (protectedRoutes(req)) await auth.protect();
+  const envKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const isPlaceholder = !envKey || envKey.includes("XXXXX") || envKey.includes("your_") || envKey === "placeholder";
+
+  if (!isPlaceholder && protectedRoutes(req)) {
+    await auth.protect();
+  }
 });
 
 export const config = {

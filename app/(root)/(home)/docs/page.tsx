@@ -7,7 +7,11 @@ import { cn } from "@/lib/utils";
 import { ApiKeyDisplay } from "@/components/api-key-display";
 
 const DocsPage = () => {
-  const { isLoaded, user } = useUser();
+  // Defensive check for Clerk context
+  const clerk = useUser();
+  const isLoaded = clerk?.isLoaded;
+  const user = clerk?.user;
+
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"intro" | "api" | "sdk">("intro");
