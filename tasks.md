@@ -292,3 +292,29 @@ End log:
 - Status: DONE
 
 ------------------------------------------------------------
+
+Task ID: T-0034
+Title: Restore Environment Variables
+Status: IN-PROGRESS
+Owner: Miles
+
+Start log:
+
+- Timestamp: 2025-12-20 12:13
+- Plan: Overwrite the .env file with the real credentials provided by the user to restore full product functionality.
+- Files or modules expected to change: .env
+
+WORK CHECKLIST
+
+- [ ] Clear existing .env placeholders
+- [ ] Populate .env with provided credentials
+- [ ] Final Verification
+
+End log:
+
+- Timestamp: 2025-12-20 12:15
+- Changed: Overwrote .env with real credentials provided by the user. Cleaned up multiline breaks in keys.
+- Tests: Verified file content via cat command.
+- Status: DONE
+
+------------------------------------------------------------
