@@ -96,7 +96,7 @@
     "eslint-config-next": "16.0.6",
     "eslint-plugin-unused-imports": "^4.3.0",
     "postcss": "^8",
-    "prettier": "^3.7.3",
+    "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
