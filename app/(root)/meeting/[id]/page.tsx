@@ -10,16 +10,18 @@ import { MeetingSetup } from "@/components/meeting-setup";
 import { useGetCallById } from "@/hooks/use-get-call-by-id";
 
 type MeetingIdPageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-const MeetingIdPage = ({ params }: MeetingIdPageProps) => {
+const MeetingIdPage = async ({ params }: MeetingIdPageProps) => {
   const [isSetupComplete, setIsSetupComplete] = useState(false);
-  const { user, isLoaded } = useUser();
+  const { isLoaded } = useUser();
 
-  const { call, isCallLoading } = useGetCallById(params.id);
+  const { id } = await params;
+
+  const { call, isCallLoading } = useGetCallById(id);
 
   if (!isLoaded || isCallLoading) return <Loader />;
 
