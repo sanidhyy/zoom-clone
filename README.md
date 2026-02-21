@@ -47,15 +47,10 @@ Here is the folder structure of this app.
 ```bash
 zoom-clone/
   |- actions/
-    |- stream.actions.ts
+    |-- stream.actions.ts
   |- app/
     |-- (auth)/
-        |--- sign-in/[[...sign-in]]/
-        |--- sign-up/[[...sign-up]]/
     |-- (root)/
-        |--- (home)
-        |--- meeting
-        |--- layout.tsx
     |-- apple-icon.png
     |-- favicon.ico
     |-- globals.css
@@ -85,31 +80,22 @@ zoom-clone/
     |-- use-get-calls.ts
   |- lib/
     |-- utils.ts
+  |- providers/
+    |-- stream-client-provider.tsx
   |- public/
-    |-- icons/
-    |-- images/
-  |- scripts/
-    |-- prod.ts
-    |-- reset.ts
-    |-- seed.ts
-  |- store/
-    |-- use-exit-modal.ts
-    |-- use-hearts-modal.ts
-    |-- use-practice-modal.ts
-  |- types/
-    |-- canvas.ts
   |- .env.example
-  |- .env.local
-  |- .eslintrc.js
+  |- .env/.env.local
+  |- .eslintrc.json
   |- .gitignore
   |- .prettierrc.json
+  |- bun.lockb
   |- components.json
   |- environment.d.ts
   |- middleware.ts
+  |- netlify.toml
   |- next.config.mjs
-  |- package-lock.json
   |- package.json
-  |- postcss.config.js
+  |- postcss.config.mjs
   |- tailwind.config.ts
   |- tsconfig.json
 ```
@@ -223,31 +209,35 @@ You might encounter some bugs while using this app. You are more than welcome to
 Useful resources and dependencies that are used in Yoom.
 
 <!--- DEPENDENCIES_START --->
-- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^5.1.3
-- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.0.5
-- [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.0.6
-- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.0.2
-- [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.1.5
-- [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.2.3
-- [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.0.13
-- [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.0
+- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^5.7.5
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
+- [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.16
+- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
+- [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.2.15
+- [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.7.32
+- [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.31.8
+- [@types/node](https://www.npmjs.com/package/@types/node): ^25
+- [@types/react](https://www.npmjs.com/package/@types/react): ^19
+- [@types/react-datepicker](https://www.npmjs.com/package/@types/react-datepicker): ^7.0.0
+- [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19
+- [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^0.379.0
-- [next](https://www.npmjs.com/package/next): 14.2.3
-- [react](https://www.npmjs.com/package/react): ^18
-- [react-datepicker](https://www.npmjs.com/package/react-datepicker): ^6.9.0
-- [react-dom](https://www.npmjs.com/package/react-dom): ^18
-- [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^2.3.0
+- [eslint](https://www.npmjs.com/package/eslint): ^9
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.1.6
+- [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.3.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^0.574.0
+- [next](https://www.npmjs.com/package/next): 15.5.10
+- [postcss](https://www.npmjs.com/package/postcss): ^8.5.6
+- [prettier](https://www.npmjs.com/package/prettier): ^3.7.4
+- [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.7.1
+- [react](https://www.npmjs.com/package/react): ^19
+- [react-datepicker](https://www.npmjs.com/package/react-datepicker): ^8.10.0
+- [react-dom](https://www.npmjs.com/package/react-dom): ^19
+- [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.4.0
+- [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^3.4.17
 - [tailwindcss-animate](https://www.npmjs.com/package/tailwindcss-animate): ^1.0.7
-- [@types/node](https://www.npmjs.com/package/@types/node): ^20
-- [@types/react](https://www.npmjs.com/package/@types/react): ^18
-- [@types/react-datepicker](https://www.npmjs.com/package/@types/react-datepicker): ^6.2.0
-- [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^18
-- [eslint](https://www.npmjs.com/package/eslint): ^8
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 14.2.3
-- [postcss](https://www.npmjs.com/package/postcss): ^8
-- [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^3.4.1
-- [typescript](https://www.npmjs.com/package/typescript): ^5
+- [typescript](https://www.npmjs.com/package/typescript): ^5.9.3
+
 <!--- DEPENDENCIES_END --->
 
 ## :coffee: Buy Me a Coffee
