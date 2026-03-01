@@ -233,7 +233,7 @@ Useful resources and dependencies that are used in Yoom.
 - [react](https://www.npmjs.com/package/react): ^19
 - [react-datepicker](https://www.npmjs.com/package/react-datepicker): ^8.10.0
 - [react-dom](https://www.npmjs.com/package/react-dom): ^19
-- [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.4.0
+- [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.5.0
 - [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^3.4.17
 - [tailwindcss-animate](https://www.npmjs.com/package/tailwindcss-animate): ^1.0.7
 - [typescript](https://www.npmjs.com/package/typescript): ^5.9.3
