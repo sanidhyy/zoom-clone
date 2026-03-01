@@ -84,7 +84,7 @@
     "react": "^19",
     "react-datepicker": "^8.10.0",
     "react-dom": "^19",
-    "tailwind-merge": "^3.4.0",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
