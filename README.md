@@ -229,7 +229,7 @@ Useful resources and dependencies that are used in Yoom.
 - [next](https://www.npmjs.com/package/next): 15.5.10
 - [postcss](https://www.npmjs.com/package/postcss): ^8.5.6
 - [prettier](https://www.npmjs.com/package/prettier): ^3.8.1
-- [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.7.1
+- [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.7.2
 - [react](https://www.npmjs.com/package/react): ^19
 - [react-datepicker](https://www.npmjs.com/package/react-datepicker): ^8.10.0
 - [react-dom](https://www.npmjs.com/package/react-dom): ^19
