@@ -96,7 +96,6 @@ zoom-clone/
   |- next.config.mjs
   |- package.json
   |- postcss.config.mjs
-  |- tailwind.config.ts
   |- tsconfig.json
 ```
 <!--- FOLDER_STRUCTURE_END --->
@@ -216,14 +215,15 @@ Useful resources and dependencies that are used in Yoom.
 - [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.2.15
 - [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.7.50
 - [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.36.0
+- [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.2.4
 - [@types/node](https://www.npmjs.com/package/@types/node): ^25
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19
 - [@types/react-datepicker](https://www.npmjs.com/package/@types/react-datepicker): ^7.0.0
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
-- [eslint](https://www.npmjs.com/package/eslint): ^10
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.2.2
+- [eslint](https://www.npmjs.com/package/eslint): ^9.0.0
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 15.5.15
 - [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.4.1
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.14.0
 - [next](https://www.npmjs.com/package/next): 15.5.15
@@ -234,7 +234,7 @@ Useful resources and dependencies that are used in Yoom.
 - [react-datepicker](https://www.npmjs.com/package/react-datepicker): ^8.10.0
 - [react-dom](https://www.npmjs.com/package/react-dom): ^19
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.5.0
-- [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^3.4.18
+- [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^4.2.4
 - [tailwindcss-animate](https://www.npmjs.com/package/tailwindcss-animate): ^1.0.7
 - [typescript](https://www.npmjs.com/package/typescript): ^5.9.3
 
