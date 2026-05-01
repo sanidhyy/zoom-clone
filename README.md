@@ -215,7 +215,7 @@ Useful resources and dependencies that are used in Yoom.
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
 - [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.2.15
 - [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.7.50
-- [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.31.8
+- [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.36.0
 - [@types/node](https://www.npmjs.com/package/@types/node): ^25
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19
 - [@types/react-datepicker](https://www.npmjs.com/package/@types/react-datepicker): ^7.0.0
@@ -227,7 +227,7 @@ Useful resources and dependencies that are used in Yoom.
 - [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.4.1
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.14.0
 - [next](https://www.npmjs.com/package/next): 15.5.15
-- [postcss](https://www.npmjs.com/package/postcss): ^8.5.6
+- [postcss](https://www.npmjs.com/package/postcss): ^8.5.13
 - [prettier](https://www.npmjs.com/package/prettier): ^3.8.1
 - [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.7.2
 - [react](https://www.npmjs.com/package/react): ^19
