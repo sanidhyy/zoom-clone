@@ -1,13 +1,4 @@
-"use client";
-
-import { useUser } from "@clerk/nextjs";
-import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
-import { useState } from "react";
-
-import { Loader } from "@/components/loader";
-import { MeetingRoom } from "@/components/meeting-room";
-import { MeetingSetup } from "@/components/meeting-setup";
-import { useGetCallById } from "@/hooks/use-get-call-by-id";
+import MeetingClient from "./meeting-client";
 
 type MeetingIdPageProps = {
   params: Promise<{
@@ -16,28 +7,8 @@ type MeetingIdPageProps = {
 };
 
 const MeetingIdPage = async ({ params }: MeetingIdPageProps) => {
-  const [isSetupComplete, setIsSetupComplete] = useState(false);
-  const { isLoaded } = useUser();
-
   const { id } = await params;
-
-  const { call, isCallLoading } = useGetCallById(id);
-
-  if (!isLoaded || isCallLoading) return <Loader />;
-
-  return (
-    <main className="h-screen w-full">
-      <StreamCall call={call}>
-        <StreamTheme>
-          {!isSetupComplete ? (
-            <MeetingSetup setIsSetupComplete={setIsSetupComplete} />
-          ) : (
-            <MeetingRoom />
-          )}
-        </StreamTheme>
-      </StreamCall>
-    </main>
-  );
+  return <MeetingClient id={id} />;
 };
 
 export default MeetingIdPage;

@@ -59,7 +59,7 @@ export const MeetingRoom = () => {
         </div>
 
         <div
-          className={cn("ml-2 hidden h-[calc(100vh_-_86px)]", {
+          className={cn("ml-2 hidden h-[calc(100vh-86px)]", {
             "show-block": showParticipants,
           })}
         >
