@@ -223,7 +223,7 @@ Useful resources and dependencies that are used in Yoom.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [eslint](https://www.npmjs.com/package/eslint): ^9.0.0
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 15.5.15
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.2.7
 - [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.4.1
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.14.0
 - [next](https://www.npmjs.com/package/next): 15.5.18
