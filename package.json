@@ -94,12 +94,12 @@
     "@types/react-dom": "^19",
     "@tailwindcss/postcss": "^4.2.4",
     "eslint": "^9.0.0",
-    "eslint-config-next": "16.2.7",
+    "eslint-config-next": "15.5.18",
     "eslint-plugin-unused-imports": "^4.4.1",
     "postcss": "^8.5.13",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
