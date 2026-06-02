@@ -83,6 +83,8 @@ zoom-clone/
   |- providers/
     |-- stream-client-provider.tsx
   |- public/
+  |- types/
+    |-- styles.d.ts
   |- .env.example
   |- .env/.env.local
   |- .eslintrc.json
@@ -223,7 +225,7 @@ Useful resources and dependencies that are used in Yoom.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [eslint](https://www.npmjs.com/package/eslint): ^9.0.0
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.2.7
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 15.5.18
 - [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.4.1
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.14.0
 - [next](https://www.npmjs.com/package/next): 15.5.18
@@ -236,7 +238,7 @@ Useful resources and dependencies that are used in Yoom.
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.6.0
 - [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^4.3.0
 - [tailwindcss-animate](https://www.npmjs.com/package/tailwindcss-animate): ^1.0.7
-- [typescript](https://www.npmjs.com/package/typescript): ^5.9.3
+- [typescript](https://www.npmjs.com/package/typescript): ^6.0.3
 
 <!--- DEPENDENCIES_END --->
 
