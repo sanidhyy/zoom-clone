@@ -96,7 +96,7 @@
     "eslint": "^10.8.0",
     "eslint-config-next": "16.2.9",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "postcss": "^8.5.13",
+    "postcss": "^8.5.26",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.0",
