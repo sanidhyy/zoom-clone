@@ -221,7 +221,7 @@ Useful resources and dependencies that are used in Yoom.
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^5.7.5
 - [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
 - [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.24
-- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
+- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.3.3
 - [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.2.18
 - [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.7.61
 - [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.39.3
