@@ -237,7 +237,7 @@ Useful resources and dependencies that are used in Yoom.
 - [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.4.1
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.22.0
 - [next](https://www.npmjs.com/package/next): 15.5.21
-- [postcss](https://www.npmjs.com/package/postcss): ^8.5.13
+- [postcss](https://www.npmjs.com/package/postcss): ^8.5.26
 - [prettier](https://www.npmjs.com/package/prettier): ^3.9.6
 - [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.8.1
 - [react](https://www.npmjs.com/package/react): ^19
