@@ -225,7 +225,7 @@ Useful resources and dependencies that are used in Yoom.
 - [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.2.18
 - [@stream-io/node-sdk](https://www.npmjs.com/package/@stream-io/node-sdk): ^0.8.8
 - [@stream-io/video-react-sdk](https://www.npmjs.com/package/@stream-io/video-react-sdk): ^1.43.1
-- [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.2.4
+- [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
 - [@types/node](https://www.npmjs.com/package/@types/node): ^26
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19
 - [@types/react-datepicker](https://www.npmjs.com/package/@types/react-datepicker): ^7.0.0
