@@ -92,7 +92,7 @@
     "@types/react": "^19",
     "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4.2.4",
+    "@tailwindcss/postcss": "^4.3.3",
     "eslint": "^10.9.1",
     "eslint-config-next": "16.3.6",
     "eslint-plugin-unused-imports": "^4.4.1",
