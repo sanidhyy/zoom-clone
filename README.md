@@ -90,7 +90,7 @@ zoom-clone/
   |- .eslintrc.json
   |- .gitignore
   |- .prettierrc.json
-  |- bun.lockb
+  |- bun.lock
   |- components.json
   |- environment.d.ts
   |- middleware.ts
