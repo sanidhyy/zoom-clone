@@ -219,7 +219,7 @@ Useful resources and dependencies that are used in Yoom.
 
 <!--- DEPENDENCIES_START --->
 - [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^5.7.5
-- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.3.1
 - [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.24
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.5.0
 - [@radix-ui/react-toast](https://www.npmjs.com/package/@radix-ui/react-toast): ^1.2.18
@@ -233,7 +233,7 @@ Useful resources and dependencies that are used in Yoom.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [eslint](https://www.npmjs.com/package/eslint): ^10.9.1
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.3
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.4.6
 - [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports): ^4.4.1
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.22.0
 - [next](https://www.npmjs.com/package/next): 15.5.28
